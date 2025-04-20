@@ -1,2 +1,2 @@
 # IMMAGEN
-Intelligent Multi-Modal Agents based on Generative Narrative Evaluation
+Intelligent Multi-Modal Agents based on Generative Narrative Evaluation.
