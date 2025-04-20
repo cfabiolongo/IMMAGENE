@@ -8,25 +8,10 @@ import json
 # Endpoint locale di Ollama
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
 OLLAMA_API_URL = "http://localhost:11434/api/generate"
-
-image_label = None  # dichiarazione globale
-
-# Goal system
-# Formulate an optimal-single goal from the scene (without other text) in the shape of predicate, with single-words label related to an agent from the text of the scene. Verbs can have two arguments. For example: "The car runs on the highway —→ AGENT(CAR),  RUN(CAR, HIGHWAY)"
-
-multimodal_model = "llava:34b-v1.6-fp16"
-text_model = "qwen2.5:14b-instruct-q8_0"
-
-# home:
-# vision: llava:13b-v1.5-q6_K
-# text: llama3:8b-instruct-q8_0
-
-# work:
-# vision: llava:34b-v1.6-fp16, llava:13b-v1.6-vicuna-q8_0,  llama3.2-vision:11b-instruct-q8_0
-# text: llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0
+#
 
 # Funzione per inferenza streaming LLM testuale
-def ask_ollama_stream(user_prompt, system, temp, model=text_model):
+def ask_ollama_stream(user_prompt, system, temp, model):
     payload = {
         "model": model,
         "system": system,
@@ -61,7 +46,7 @@ def image_to_base64(image_path):
 
 
 # Funzione per inferenza multimodale su immagine
-def describe_image(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model=multimodal_model):
+def describe_image(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
     image_base64 = image_to_base64(image_path)
     data = {
         "model": model,
