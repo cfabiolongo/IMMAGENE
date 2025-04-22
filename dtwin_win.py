@@ -39,7 +39,7 @@ beliefs_temp = "0.8"
 
 # Prompt predefiniti per ogni tipo
 prediction_prompts = {
-    "beliefs": """Extract only beliefs separated by commas (without other text), and single-word (possible other words as additional belief arguments), related to an actor from the text of a scene beliefs related to verb can have two arguments. The belief ACTOR(X) must be present, where X is the main subject of the scene. For example: The car runs on the highway —→ ACTOR(CAR),  RUN(CAR, HIGHWAY).""",
+    "beliefs": """Extract only beliefs separated by commas (without other text), and single-word (possible other words as additional belief arguments), related to an actor from the text of a scene beliefs related to verb can have two arguments. The belief ACTOR(X) must be present, where X is the main subject of the scene. For example: The car runs on the highway —→ ACTOR(CAR),  RUN(CAR, HIGHWAY). Connect multi-words concept with underscore.""",
     "goal": """You are a virtual assistant. Formulate briefly a single goal to carry out for the described scene. No additional text.""",
     "action": """You are a virtual assistant. Formulate very briefly the most appropriate action to achieve the Goal, for the described scene, without additional text or explanation. Each action must be in the a predicate ACTION(X), where ACTION=verb, with X the object of the action (in capital). No other text is admitted."""
 }
