@@ -2,11 +2,21 @@ import os
 import subprocess
 import pandas as pd
 from tqdm import tqdm
+import json
 
 # Cartella contenente le immagini
 image_folder = "C:/Users/fabio/Pictures/DIPA/images"
-prompt_instruction = "Provide a description in english of subjects and actions from the picture, with no further text."
-output_excel = 'image_descriptions.xlsx'
+prompt_instruction = "Provide a brief list of subjects and actions from the picture, with no further text."
+output_excel = 'image_descriptions_noq.xlsx'
+
+ollama_host = "http://localhost:11434"
+model = "llava:13b-v1.5-q6_K"
+
+# ollama_host = "http://172.16.61.73:11434"
+# model = "llava:34b-v1.6-fp16"
+
+
+
 
 # Estensioni valide per le immagini
 valid_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp'}
@@ -21,18 +31,24 @@ results = []
 for filename in tqdm(image_files, desc="Inferenza immagini"):
     image_path = os.path.join(image_folder, filename)
 
-    # Prompt costruito come prompt visuale per LLaVA
-    prompt = f"<image>\n{prompt_instruction}"
+    prompt_data = {
+        "prompt": f"<image>\n{prompt_instruction}",
+        "temperature": 0.0
+    }
 
     try:
         result = subprocess.run(
-            ["ollama", "run", "llava:13b-v1.5-q6_K"],
-            input=prompt,
+            ["ollama", "run", model],
+            input=json.dumps(prompt_data),
             text=True,
             capture_output=True,
             check=True,
-            env={**os.environ, "OLLAMA_IMAGE": image_path},
-            encoding='utf-8'  # ← Risolve problemi di charset su Windows
+            env={
+                **os.environ,
+                "OLLAMA_HOST": ollama_host,
+                "OLLAMA_IMAGE": image_path
+            },
+            encoding='utf-8'
         )
         description = result.stdout.strip() if result.stdout else "No output"
         print(description)
