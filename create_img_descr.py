@@ -6,14 +6,14 @@ import json
 
 # Cartella contenente le immagini
 image_folder = "C:/Users/fabio/Pictures/DIPA/images"
-prompt_instruction = "Provide a brief list of subjects and actions from the picture, with no further text."
-output_excel = 'image_descriptions_noq.xlsx'
+prompt_instruction = "Describe the picture, with no further text."
+output_excel = 'image_descriptions_t0_34b.xlsx'
 
-ollama_host = "http://localhost:11434"
-model = "llava:13b-v1.5-q6_K"
+#ollama_host = "http://localhost:11434"
+#model = "llava:13b-v1.5-q6_K"
 
-# ollama_host = "http://172.16.61.73:11434"
-# model = "llava:34b-v1.6-fp16"
+ollama_host = "http://172.16.61.73:11434"
+model = "llava:34b-v1.6-fp16"
 
 
 
@@ -51,7 +51,8 @@ for filename in tqdm(image_files, desc="Inferenza immagini"):
             encoding='utf-8'
         )
         description = result.stdout.strip() if result.stdout else "No output"
-        print(description)
+        print(f"{filename} --> {description}")
+
     except subprocess.CalledProcessError as e:
         error_msg = e.stderr.strip() if e.stderr else "Errore sconosciuto"
         description = f"Errore: {error_msg}"
