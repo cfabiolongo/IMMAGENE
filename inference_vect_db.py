@@ -9,7 +9,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 def find_most_similar(input_text):
     input_embedding = model.encode(input_text).astype(np.float32)
 
-    conn = sqlite3.connect('descrizioni.db')
+    conn = sqlite3.connect('inferences/descrizioni_13b_q6.db')
     c = conn.cursor()
     c.execute('SELECT id, file_image_name, description, embedding FROM immagini')
     rows = c.fetchall()
