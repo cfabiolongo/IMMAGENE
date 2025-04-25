@@ -10,14 +10,11 @@ image_folder = "C:/Users/fabio/Pictures/DIPA/images"
 prompt = "Provide a detailed list of subjects and actions from the picture, with no further text."
 output_excel = 'image_descriptions_t0_34b.xlsx'
 
-ollama_host = "http://localhost:11434"
-model = "llava:13b-v1.5-q6_K"
+# model = "llava:13b-v1.5-q6_K"
+model = "llava:34b-v1.6-fp16"
 
-#ollama_host = "http://172.16.61.73:11434"
-#model = "llava:34b-v1.6-fp16"
-
-
-OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
+# OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
+OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
 temp = 0.8
 
 # Estensioni valide per le immagini

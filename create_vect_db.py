@@ -1,21 +1,27 @@
-# pip install pandas sentence-transformers faiss-cpu
+# pip install pandas sentence-transformers faiss-cpu tqdm
 
 import pandas as pd
 import sqlite3
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
+
+# Inizializza tqdm per pandas
+tqdm.pandas()
 
 # Inizializza modello
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Carica Excel
-df = pd.read_excel('image_descriptions.xlsx')  # ← Cambia con il tuo file
+df = pd.read_excel('inferences/image_descriptions_t08_34b.xlsx')
 
-# Calcola embedding
-df['embedding'] = df['description'].apply(lambda d: model.encode(d).astype(np.float32).tobytes())
+# Calcola embedding con barra di progresso
+df['embedding'] = df['description'].progress_apply(
+    lambda d: model.encode(d).astype(np.float32).tobytes()
+)
 
 # Crea DB SQLite
-conn = sqlite3.connect('descrizioni.db')
+conn = sqlite3.connect('inferences/image_descriptions_t08_34b.db')
 c = conn.cursor()
 
 # Crea tabella
@@ -28,8 +34,8 @@ CREATE TABLE IF NOT EXISTS immagini (
 )
 ''')
 
-# Inserisce righe
-for _, row in df.iterrows():
+# Inserisce righe con barra di progresso
+for _, row in tqdm(df.iterrows(), total=len(df), desc="Inserimento nel DB"):
     c.execute('''
         INSERT INTO immagini (file_image_name, description, embedding)
         VALUES (?, ?, ?)
