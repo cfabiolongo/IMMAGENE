@@ -18,14 +18,14 @@ system_prompts = {
     "action": """You are a virtual assistant. Formulate very briefly the most appropriate action to achieve the Goal, for the described scene, without additional text or explanation. No other text is admitted."""
 }
 
-OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
-# OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
 temp = 0.8
 
 results = []
 
 # Carica il file Excel
 df = pd.read_excel("inferences/image_descriptions_t08_34b.xlsx")
+df = df.head(5)
+
 
 # Filtra le descrizioni non nulle
 descriptions = df["description"].fillna("empty").tolist()
@@ -61,4 +61,5 @@ df['goals'] = goals
 df['actions'] = actions
 
 # Salva in un nuovo file Excel
-df.to_excel("image_descriptions_with_responses.xlsx", index=False)
+df.to_excel("inferences/image_descriptions_t08_34b_plus_actions.xlsx", index=False)
+print("\n✅ goals+actions creati con successo.")
