@@ -7,7 +7,7 @@ import json
 
 # Endpoint locale di Ollama
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
-OLLAMA_API_URL = "http://localhost:11434/api/generate"
+OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 #
 
 # Funzione per inferenza streaming LLM testuale

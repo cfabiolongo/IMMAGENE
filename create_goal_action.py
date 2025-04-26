@@ -9,7 +9,7 @@ from ollama_inference import ask_ollama_stream
 # work:
 # llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0
 
-text_model = "llama3:8b-instruct-q8_0"
+text_model = "llama3.3:70b-instruct-fp16"
 
 # Prompt predefiniti per ogni tipo
 system_prompts = {
@@ -24,7 +24,7 @@ results = []
 
 # Carica il file Excel
 df = pd.read_excel("inferences/image_descriptions_t08_34b.xlsx")
-df = df.head(5)
+# df = df.head(5)
 
 
 # Filtra le descrizioni non nulle
