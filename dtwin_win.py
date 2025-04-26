@@ -10,20 +10,20 @@ import threading
 import cv2
 from datetime import datetime
 
-# server:
-# OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
+# indirizzo server 172.16.61.73
 
 # Endpoint locale di Ollama
-OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
-OLLAMA_API_URL = "http://localhost:11434/api/generate"
+OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
+OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
+
 
 image_label = None  # dichiarazione globale
 
 # Goal system
 # Formulate an optimal-single goal from the scene (without other text) in the shape of predicate, with single-words label related to an agent from the text of the scene. Verbs can have two arguments. For example: "The car runs on the highway —→ AGENT(CAR),  RUN(CAR, HIGHWAY)"
 
-multimodal_model = "llava:13b-v1.5-q6_K"
-text_model = "qwen2.5:14b-instruct-q6_K"
+multimodal_model = "llava:34b-v1.6-fp16"
+text_model = "llama3:8b-instruct-q8_0"
 
 # home:
 # vision: llava:13b-v1.5-q6_K
@@ -105,7 +105,7 @@ def run_beliefs_inference(prompt, system, temp):
     print(f"\nAchieving beliefs prediction with temperature {temp}...")
     print(f"system: {system}")
     print(f"prompt: {prompt}")
-    outcome = ask_ollama_stream(prompt, system, temp, text_model)
+    outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system, temp, text_model)
     root.after(0, lambda: update_beliefs_result(outcome))
 
 

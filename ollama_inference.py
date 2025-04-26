@@ -8,10 +8,10 @@ import json
 # Endpoint locale di Ollama
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
-#
+
 
 # Funzione per inferenza streaming LLM testuale
-def ask_ollama_stream(user_prompt, system, temp, model):
+def ask_ollama_stream(OLLAMA_API_URL, user_prompt, system, temp, model):
     payload = {
         "model": model,
         "system": system,
