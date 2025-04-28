@@ -15,6 +15,19 @@ def query_database(file_to_search):
         # --- SOLUZIONE: togliere _id prima di stampare
         result.pop('_id', None)
         print(json.dumps(result, indent=2, ensure_ascii=False))
+
+        # Estrai defaultAnnotation
+        default_annotation = result.get('defaultAnnotation', {})
+
+        if not default_annotation:
+            print("⚠️ Nessun campo 'defaultAnnotation' trovato nel documento.")
+            return
+
+        # Cicla sui sottocampi di defaultAnnotation
+        for category_name, category_data in default_annotation.items():
+            if_no_privacy = category_data.get('ifNoPrivacy', None)
+            print(f"🧩 Categoria: {category_name} | ifNoPrivacy: {if_no_privacy}")
+
     else:
         print(f"\n❌ Nessun documento trovato per {file_to_search}")
 
