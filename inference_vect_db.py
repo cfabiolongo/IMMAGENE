@@ -1,6 +1,8 @@
 import sqlite3
 import numpy as np
+# pip install sentence-transformers
 from sentence_transformers import SentenceTransformer
+# pip install huggingface_hub[hf_xet]
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Inizializza modello

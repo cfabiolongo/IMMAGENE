@@ -14,7 +14,7 @@ from datetime import datetime
 
 # Endpoint locale di Ollama
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
-OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
+OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
 
 image_label = None  # dichiarazione globale
@@ -33,15 +33,15 @@ text_model = "llama3:8b-instruct-q8_0"
 # vision: llava:34b-v1.6-fp16, llava:13b-v1.6-vicuna-q8_0,  llama3.2-vision:11b-instruct-q8_0
 # text: llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0
 
-image_prompt = "Provide a brief list of subjects and actions from the picture, with no further text."
+image_prompt = "Provide a detailed list of subjects and actions from the picture, with no further text."
 image_temp = "0.8"
 beliefs_temp = "0.8"
 
 # Prompt predefiniti per ogni tipo
 prediction_prompts = {
-    "beliefs": """Extract only beliefs separated by commas (without other text), and single-word (possible other words as additional belief arguments), related to an actor from the text of a scene beliefs related to verb can have two arguments. The belief ACTOR(X) must be present, where X is the main subject of the scene. For example: The car runs on the highway —→ ACTOR(CAR),  RUN(CAR, HIGHWAY). Connect multi-words concept with underscore.""",
+    "beliefs": """Extract only beliefs (without other text) separated by semicolon, and single-word (possible other words as additional belief arguments), related to an actor from the text of a scene beliefs related to verb can have two arguments. The belief ACTOR(X) must be present, where X is the main subject of the scene. For example: The car runs on the highway —→ ACTOR(CAR),  RUN(CAR, HIGHWAY). Connect multi-words concept with underscore.""",
     "goal": """You are a virtual assistant. Formulate briefly a single goal to carry out for the described scene. No additional text.""",
-    "action": """You are a virtual assistant. Formulate very briefly the most appropriate action to achieve the Goal, for the described scene, without additional text or explanation. Each action must be in the a predicate ACTION(X), where ACTION=verb, with X the object of the action (in capital). No other text is admitted."""
+    "action": """You are a virtual assistant. Formulate very briefly the most appropriate action to achieve the Goal, for the described scene, without additional text or explanation. No other text is admitted."""
 }
 
 # === Funzioni per Achieve ===
