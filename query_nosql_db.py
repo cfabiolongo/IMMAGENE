@@ -8,7 +8,13 @@ def query_database(file_to_search):
     db = client['dipa']
     collection = db['annotations_collection']
 
-    result = collection.find_one({'file_name': file_to_search})
+    # result = collection.find_one({'file_name': file_to_search})
+
+    # Estrai solo la prima parte del nome del file prima dell'underscore
+    file_prefix = file_to_search.split('_')[0]
+
+    # Esegui la ricerca usando la prima parte del nome
+    result = collection.find_one({'file_name': {'$regex': f'^{file_prefix}'}})
 
     if result:
         print(f"\n📄 Documento trovato per {file_to_search}:\n")
