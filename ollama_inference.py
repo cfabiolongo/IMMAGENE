@@ -55,6 +55,7 @@ def describe_image(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
         "temperature": temp,
         "stream": False,
         "top_k": 0,
+        "num_predict": 77  # <-- vincolo testo generato a 77 tokes
     }
     try:
         response = requests.post(OLLAMA_API_URL_MULTI, json=data)

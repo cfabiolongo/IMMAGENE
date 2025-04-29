@@ -1,14 +1,12 @@
 import os
-import subprocess
 import pandas as pd
 from tqdm import tqdm
-import json
-from ollama_inference import ask_ollama_stream, describe_image
+from ollama_inference import describe_image
 
 # Cartella contenente le immagini
-image_folder = "C:/Users/fabio/Pictures/DIPA/images"
-prompt = "Provide a detailed list of subjects and actions from the picture, with no further text."
-output_excel = 'image_descriptions_t0_34b.xlsx'
+image_folder = "/home/fabio/Immagini/DIPA/images"
+prompt = "Describe very briefly."
+output_excel = 'image_descriptions_t0_34b_brief.xlsx'
 
 # model = "llava:13b-v1.5-q6_K"
 model = "llava:34b-v1.6-fp16"
