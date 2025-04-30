@@ -74,9 +74,9 @@ if __name__ == "__main__":
         # Itera sulle righe del DataFrame
         for _, row in df.iterrows():
             reference = str(row["input_file_image_name"]).strip()
-            print(f"\n>>>>> Closer item to {reference}: ")
-            file_name = str(row["matched_file_image_name"]).strip()
             descr = row["input_description"]
+            print(f"\n>>>>> Closer item to {reference} whose description is: {descr}")
+            file_name = str(row["matched_file_image_name"]).strip()
 
             if pd.notna(file_name) and file_name:
                 query_database(file_name.split('.')[0], descr)
