@@ -54,3 +54,6 @@ if __name__ == "__main__":
     else:
         print("⚠️ Devi inserire un nome di file valido!")
 
+
+# system: In the following description, answer with TRUE or FALSE if there are elements of the following privacy-threating list:
+# ['Human hair', 'Building', 'Person', 'Boy', 'Man']. Then, also tell me which elements you found.

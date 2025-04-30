@@ -59,9 +59,9 @@ def process_excel_descriptions(file_path):
 
 
 if __name__ == "__main__":
-    excel_file = "inferences/image_descriptions_t08_34b_dipalike.xlsx"
+    excel_file = "inferences/image_descriptions_t08_34b_dipalike_test300.xlsx"
     df_risultati = process_excel_descriptions(excel_file)
     print("\n✅ Risultati completi:")
     # Salva i risultati in un nuovo file Excel
-    output_file = "risultati_validazione.xlsx"
+    output_file = "risultati_validazione_test300.xlsx"
     df_risultati.to_excel(output_file, index=False)
