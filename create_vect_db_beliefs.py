@@ -31,7 +31,10 @@ c.execute('''
 CREATE TABLE IF NOT EXISTS immagini (
     id INTEGER PRIMARY KEY,
     file_image_name TEXT,   
-    description TEXT,   
+    description TEXT,
+    beliefs TEXT,
+    goals TEXT,
+    actions TEXT,
     embedding BLOB
 )
 ''')
@@ -39,9 +42,9 @@ CREATE TABLE IF NOT EXISTS immagini (
 # Inserisce righe con barra di progresso
 for _, row in tqdm(df.iterrows(), total=len(df), desc="Inserimento nel DB"):
     c.execute('''
-        INSERT INTO immagini (file_image_name, description, embedding)
-        VALUES (?, ?, ?)
-    ''', (row['file_image_name'], row['description'], row['embedding']))
+        INSERT INTO immagini (file_image_name, description, beliefs, goals, actions, embedding)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (row['file_image_name'], row['description'], row['beliefs'], row['goals'], row['actions'], row['embedding']))
 
 conn.commit()
 conn.close()
