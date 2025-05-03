@@ -3,17 +3,18 @@ import json
 import pandas as pd  # aggiunto per leggere il file Excel
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream
+import re
 
 # home (localhost):
-# llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K
+# llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K, mistral:7b-instruct-q8_0
 
 # work (172.16.61.73):
 # llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0
 
-# OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
-OLLAMA_API_URL = "http://localhost:11434/api/generate"
+OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
+# OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "llama3:8b-instruct-q8_0"
+text_model = "llama3.3:70b-instruct-fp16"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -22,6 +23,7 @@ response = []
 ground_truth_number = []
 extracted_features = []
 explanation = []
+description = []
 
 
 def query_database(file_to_search, prompt):
@@ -61,7 +63,12 @@ def query_database(file_to_search, prompt):
         system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
-        print(f"meta-outcome: {meta_outcome}")
+        # print(f"meta-outcome: {meta_outcome}")
+
+        # solo per modelli chain-of-thoughs
+        # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
+
+        print(f"\nmeta-outcome senza cot: {meta_outcome}")
 
         meta_outcome = meta_outcome.replace("\n", " ")
 
@@ -83,7 +90,7 @@ def query_database(file_to_search, prompt):
         ground_truth_number.append(len(no_privacy_false_categories))
         extracted_features.append(part2)
         explanation.append(meta_outcome)
-
+        description.append(prompt)
 
     else:
         print(f"\n❌ Nessun documento trovato per {file_to_search}")
@@ -91,7 +98,7 @@ def query_database(file_to_search, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    excel_path = "inferences/mismatch_risultati_test300.xlsx"
+    excel_path = "inferences/risultati_validazione_test300.xlsx"
     df = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
@@ -113,6 +120,7 @@ if __name__ == "__main__":
         print(len(ground_truth_number))
         print(len(extracted_features))
         print(len(explanation))
+        print(len(description))
 
 
         # Creazione del DataFrame
@@ -121,10 +129,11 @@ if __name__ == "__main__":
             'response': response,
             'ground_truth_ft_number': ground_truth_number,
             'extracted_features': extracted_features,
-            'explanation': explanation
+            'explanation': explanation,
+            'description': description
         })
 
         output_df = pd.DataFrame(df)
-        output_path = "meta_llama3_8b-instruct-q8_0.xlsx"
+        output_path = "meta_llama3.3_70b-instruct-fp16.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
