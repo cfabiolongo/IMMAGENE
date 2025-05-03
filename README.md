@@ -42,3 +42,58 @@ This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), w
 ```sh
 > pip install opencv-python
 ```
+
+
+### Pandas (for clauses exporting from mongodb to excel)
+
+
+```sh
+> pip install pandas
+> pip install openpyxl
+```
+
+
+### pymongo
+
+---------------
+
+```sh
+> pip install pymongo
+```
+
+
+### MongoDB
+
+---------------
+* Install a new Mongodb community instance from [here](https://www.mongodb.com/try/download/community) (a GUI Compass installation is also recommended from [here](https://www.mongodb.com/products/tools/compass)), then create a new database named *ad-caspar* containing a collection *clauses* (the easier way is by using Compass). The url of the MongoDB server must be specified by changing the value of HOST (section LKB) in config.ini.
+
+* Create a new mongodb user in the Mongo shell (or Compass shell) as it follows:
+```sh
+> use dipa
+> db.createUser({
+  user: "root",
+  pwd: "example",
+  roles: [
+    { role: "readWrite", db: "dipa" }
+  ]
+})
+```
+
+
+### MongoDB (Docker use case)
+
+---------------
+In the case of using a mongoDB container, the latter can be accessed by the link: http://localhost:8087/ (user/password are set in config.ini).
+
+```sh
+> docker-compose -f mongo.yaml up
+```
+
+### Pandas (for clauses exporting from mongodb to excel)
+
+
+```sh
+> pip install pandas
+> pip install openpyxl
+```
+

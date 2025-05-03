@@ -29,7 +29,6 @@ def ask_ollama_stream(OLLAMA_API_URL, user_prompt, system, temp, model):
                     try:
                         token_json = json.loads(line.decode('utf-8'))
                         token = token_json.get("response", "")
-                        print(token, end="", flush=True)
                         risposta += token
                     except json.JSONDecodeError as e:
                         print(f"\n[Errore parsing token JSON]: {e}")

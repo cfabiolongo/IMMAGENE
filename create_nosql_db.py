@@ -9,12 +9,16 @@ from pymongo.errors import DuplicateKeyError
 
 def create_database():
     # 1. Connessione a MongoDB
-    client = MongoClient('mongodb://localhost:27017/')
+
+    # client = MongoClient('mongodb://localhost:27017/')
+    client = MongoClient("mongodb://root:example@localhost:27018/")
+
     db = client['dipa']
     collection = db['annotations_collection']
 
     # 2. Directory contenente i file JSON
-    directory = r'/home/fabio/Immagini/DIPA/annotations/CrowdWorks/labels'
+    # directory = r'/home/fabio/Immagini/DIPA/annotations/CrowdWorks/labels'
+    directory = "C:/Users/fabio/Pictures/DIPA/annotations/CrowdWorks/labels"
 
     # 3. Creazione indice unico su 'file_name'
     collection.create_index('file_name', unique=True)

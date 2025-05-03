@@ -4,14 +4,16 @@ import pandas as pd  # aggiunto per leggere il file Excel
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream
 
-# home:
+# home (localhost):
 # llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K
 
-# work:
+# work (172.16.61.73):
 # llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0
 
-OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
-text_model = "llama3.3:70b-instruct-fp16"
+# OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
+OLLAMA_API_URL = "http://localhost:11434/api/generate"
+
+text_model = "llama3:8b-instruct-q8_0"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -21,7 +23,10 @@ explanations = []
 
 
 def query_database(file_to_search, prompt):
-    client = MongoClient('mongodb://localhost:27017/')
+
+    client = MongoClient("mongodb://root:example@localhost:27018/")
+    # client = MongoClient('mongodb://localhost:27018/')
+
     db = client['dipa']
     collection = db['annotations_collection']
 
@@ -51,11 +56,11 @@ def query_database(file_to_search, prompt):
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
 
-        system_prompt = f"In the following description, answer with TRUE or FALSE if there are elements of the following privacy-threating list: {no_privacy_false_categories}. Then, also tell me which elements you found."
+        system_prompt = f"In the following description, answer with a single TRUE or FALSE (followed by the number of findings), weather or not you found items (or similar) from following privacy-threating list: {no_privacy_false_categories} (e.g TRUE, 2). Report also which items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
         responses.append(meta_outcome)
-        print(meta_outcome)
+        print(f"meta-outcome: {meta_outcome}")
 
     else:
         print(f"\n❌ Nessun documento trovato per {file_to_search}")
@@ -64,7 +69,7 @@ if __name__ == "__main__":
     import pandas as pd
 
     # Carica il file Excel
-    excel_path = "mismatch_risultati_test300.xlsx"
+    excel_path = "inferences/mismatch_risultati_test300.xlsx"
     df = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
