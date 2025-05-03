@@ -4,7 +4,7 @@ import json
 from pymongo import MongoClient
 
 def query_database(file_to_search):
-    client = MongoClient('mongodb://localhost:27017/')
+    client = MongoClient("mongodb://root:example@localhost:27018/")
     db = client['dipa']
     collection = db['annotations_collection']
 
