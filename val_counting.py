@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'meta_overall_mistral_7b-instruct-fp16.xlsx'
+file_path = 'meta_mismatch_qwen2.5_72b-instruct-fp16.xlsx'
 df = pd.read_excel(file_path)
 
 # True Positive
@@ -20,8 +20,19 @@ f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recal
 denominator = TP + FP + FN + TN
 accuracy = (TP + TN) / denominator if denominator > 0 else 0
 
+# Somme totali
+total_ground_truth = df['ground_truth_ft_number'].sum()
+total_extracted = df['extracted_features'].sum()
+
+# Rapporto estratti / ground truth in percentuale
+extracted_to_ground_truth_ratio = (total_extracted / total_ground_truth * 100) if total_ground_truth > 0 else 0
+
 # Stampa risultati
-print(f"Accuracy: {accuracy:.3f}\n")
+print(f"Accuracy: {accuracy:.3f}")
 print(f"Precision: {precision:.3f}")
 print(f"Recall: {recall:.3f}")
-print(f"F1 Score: {f1_score:.3f}")
+print(f"F1 Score: {f1_score:.3f}\n")
+
+print(f"Totale ground_truth_ft_number: {total_ground_truth}")
+print(f"Totale extracted_features: {total_extracted}")
+print(f"Rapporto extracted/ground_truth: {extracted_to_ground_truth_ratio:.2f}%")

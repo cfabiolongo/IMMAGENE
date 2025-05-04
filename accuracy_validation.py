@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-df = pd.read_excel("risultati_validazione_test300.xlsx")
+df = pd.read_excel("inferences/risultati_validazione_test300.xlsx")
 
 # Rimuove righe con valori mancanti
 df = df.dropna(subset=['input_file_image_name', 'matched_file_image_name'])
@@ -21,3 +21,9 @@ mismatch_df = df[df['match'] == False]
 
 # Salva in un nuovo file Excel
 mismatch_df.to_excel("mismatch_risultati_test300.xlsx", index=False)
+
+# Filtra mismatch
+match_df = df[df['match'] != False]
+
+# Salva in un nuovo file Excel
+match_df.to_excel("match_risultati_test300.xlsx", index=False)
