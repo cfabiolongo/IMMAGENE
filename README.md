@@ -14,8 +14,6 @@ for the evaluation of intelligent agent based on generative multi-modal narrativ
 This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), with the following packages versions:
 
 * [PHIDIAS](https://github.com/corradosantoro/phidias) (release 1.3.4.alpha) 
-* [Owlready2](https://pypi.org/project/Owlready2/) (ver. 0.26) 
-
 
 ### PHIDIAS
 
