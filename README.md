@@ -89,7 +89,7 @@ In the case of using a mongoDB container, the latter can be accessed by the link
 > docker-compose -f mongo.yaml up
 ```
 
-### Pandas (for clauses exporting from mongodb to excel)
+### Pandas
 
 
 ```sh
