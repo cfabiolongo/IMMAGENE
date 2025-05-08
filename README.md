@@ -2,7 +2,9 @@
 Intelligent Multi-Modal Agents based on GEnerative Narrative Evaluation.
 
 This is the repository of the Python (3.7+) implementation of IMMAGENE (**I**ntelligent **M**ulti-**M**odal **A**gents based on **Ge**nerative **N**arrative **E**valuation), 
-for the evaluation of intelligente agent based on generative multi-modal narrative. IMMAGENE is built on top of the framework [PHIDIAS](https://ceur-ws.org/Vol-2502/paper5.pdf).
+for the evaluation of intelligent agent based on generative multi-modal narrative. IMMAGENE is built on top of the framework [PHIDIAS](https://ceur-ws.org/Vol-2502/paper5.pdf).
+
+![Image 1](images/schema.jpg)
 
 
 # Installation
