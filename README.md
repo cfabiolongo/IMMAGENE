@@ -44,7 +44,7 @@ This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), w
 ```
 
 
-### Pandas (for clauses exporting from mongodb to excel)
+### Pandas
 
 
 ```sh
