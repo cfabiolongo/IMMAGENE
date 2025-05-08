@@ -1,11 +1,10 @@
-import time
 from actions import *
 
 # ---------------------------------------------------------------------
 # PHIDIAS rules variable declaration
 # ---------------------------------------------------------------------
 
-def_vars("X", "Y", "D", "H", "Z", "L", "M", "A", "D", "W")
+def_vars("D", "G",  "P", "A")
 
 # Image description reactor
 class DESCR(Reactor): pass
@@ -19,14 +18,13 @@ class main(Agent):
     def main(self):
 
         # World initialization
-        init() >> [show_line("\nInitialiting agent...\n")]
+        init() >> [show_line("\nInitialiting agent...\n"), +DESCR("Image description.") ]
 
-        # Importing related triples
-        load() >> [show_line("\nAsserting all OWL 2 triples beliefs...\n"), formulate_goal()]
-        +DESCR(X) >> [show_line("\nImage description achieved: ", X), formulate_goal(X)]
-        +GOAL(X, Y) >> [show_line("\nPlan formulation for the goal ",Y ," from the scenario ", X), formulate_plan(X)]
-
+        +DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D)]
+        +GOAL(D, G) >> [show_line("\nPlanning for the goal ",G ," from the description ", D), formulate_plan(D, G)]
+        +PLAN(D, G, P) >> [show_line("\nActions implementation the plan ", P, " to achieve the goal ",G," from the scenario ",D), formulate_action(D, G, P)]
+        +ACTION(D, G, P, A) / ack_plan(D, P) >> [show_line("\nActions ", A, " implementing the plan ",P, " ready to be executed.")]
 
 main().start()
 
-# PHIDIAS.achieve(load(), "main")
+# PHIDIAS.achieve(init(), "main")

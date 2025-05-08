@@ -46,6 +46,7 @@ INTENTIONS = config.get('CLASSES', 'PHI-Intentions').split(",")
 PROPERTIES = config.get('CLASSES', 'Properties').split(",")
 DATAS = config.get('CLASSES', 'Data').split(",")
 
+
 # ---------------------------------------------------------------------
 # Non-ontological rendering variables
 # ---------------------------------------------------------------------
@@ -61,11 +62,6 @@ DATAS = config.get('CLASSES', 'Data').split(",")
 # Ontology intialization
 class init(Procedure): pass
 # Import OWL triples
-class load(Procedure): pass
-# Turning triples to beliefs
-class turn(Procedure): pass
-
-class send(Procedure): pass
 
 class PLAN(Reactor): pass
 
@@ -76,7 +72,9 @@ class ACTION(Reactor): pass
 
 class formulate_goal(Action):
     """create sparql query from MST"""
-    def execute(self):
+    def execute(self, arg):
+        print(f"arg1: {arg}")
+
         print("Formulating goal...")
         goal = "Formulated goal"
         self.assert_belief(GOAL(goal))
@@ -84,15 +82,39 @@ class formulate_goal(Action):
 
 class formulate_plan(Action):
     """create sparql query from MST"""
-    def execute(self):
+    def execute(self, arg1, arg2):
+
+        print(f"arg1: {arg1}")
+        print(f"arg2: {arg2}")
+
         print("Formulating plan...")
         plan = "Formulated plan"
         self.assert_belief(GOAL(plan))
 
 
 class formulate_action(Action):
+
     """create sparql query from MST"""
-    def execute(self):
+    def execute(self, arg1, arg2, arg3):
+
+        print(f"arg1: {arg1}")
+        print(f"arg2: {arg2}")
+        print(f"arg3: {arg3}")
+
         print("Formulating goal...")
         goal = "Formulated goal"
         self.assert_belief(GOAL(goal))
+
+
+
+class ack_plan(ActiveBelief):
+    """ActiveBelief for achieving acknowledgement from LLM on the current plan"""
+    def evaluate(self, arg1, arg2):
+
+        print(f"arg1: {arg1}")
+        print(f"arg2: {arg2}")
+
+        # description = str(arg1).split("'")[3]
+        # plan = str(arg2).split("'")[1]
+
+        return True
