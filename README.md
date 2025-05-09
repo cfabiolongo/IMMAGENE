@@ -81,7 +81,7 @@ This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), w
 ### MongoDB (Docker use case)
 
 ---------------
-In the case of using a mongoDB container, the latter can be accessed by the link: http://localhost:8087/ (user/password are set in config.ini).
+In the case MongoDB container, Mongo Express can be accessed by the link: http://localhost:8087/ (admin/tribes).
 
 ```sh
 > docker-compose -f mongo.yaml up
