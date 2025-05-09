@@ -7,7 +7,7 @@ for the evaluation of intelligent agent based on generative multi-modal narrativ
 ![Image 1](images/schema.jpg)
 
 
-# Requirements installation
+## Requirements installation
 
 This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), with the following packages versions:
 
@@ -95,7 +95,7 @@ In the case MongoDB container, Mongo Express can be accessed by the link: http:/
 > pip install openpyxl
 ```
 
-# Framework setup
+## Framework setup
 
 bla bla bla
 
@@ -132,6 +132,6 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 * Run [query_nosql_db.py](query_nosql_db.py) to test the NoSql database (e.g 00b4064b073e51f3) 
 
 
-# Running IMMAGENE
+## Running IMMAGENE
 
 bla bla bla
