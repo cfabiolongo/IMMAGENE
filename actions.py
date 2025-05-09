@@ -71,25 +71,30 @@ class ACTION(Reactor): pass
 
 
 class formulate_goal(Action):
-    """create sparql query from MST"""
+    """Formulate goal from imahge description"""
     def execute(self, arg):
-        print(f"arg1: {arg}")
+        # print(f"arg1: {arg}")
+        descr = str(arg).split("'")[3]
+        # print(f"descr: {descr}")
 
         print("Formulating goal...")
-        goal = "Formulated goal"
-        self.assert_belief(GOAL(goal))
+        goal = "[FORMULATED_GOAL]"
+        self.assert_belief(GOAL(descr, goal))
 
 
 class formulate_plan(Action):
     """create sparql query from MST"""
     def execute(self, arg1, arg2):
 
-        print(f"arg1: {arg1}")
-        print(f"arg2: {arg2}")
+        # print(f"arg1: {arg1}")
+        # print(f"arg2: {arg2}")
+
+        descr = str(arg1).split("'")[3]
+        goal = str(arg2).split("'")[3]
 
         print("Formulating plan...")
-        plan = "Formulated plan"
-        self.assert_belief(GOAL(plan))
+        plan = "[FORMULATED_PLAN]"
+        self.assert_belief(PLAN(descr, goal, plan))
 
 
 class formulate_action(Action):
@@ -97,13 +102,17 @@ class formulate_action(Action):
     """create sparql query from MST"""
     def execute(self, arg1, arg2, arg3):
 
-        print(f"arg1: {arg1}")
-        print(f"arg2: {arg2}")
-        print(f"arg3: {arg3}")
+        # print(f"arg1: {arg1}")
+        # print(f"arg2: {arg2}")
+        # print(f"arg3: {arg3}")
 
-        print("Formulating goal...")
-        goal = "Formulated goal"
-        self.assert_belief(GOAL(goal))
+        descr = str(arg1).split("'")[3]
+        goal = str(arg2).split("'")[3]
+        plan = str(arg3).split("'")[3]
+
+        print("Formulating action...")
+        action = "[FORMULATED_ACTION]"
+        self.assert_belief(ACTION(descr, goal, plan, action))
 
 
 
@@ -111,10 +120,12 @@ class ack_plan(ActiveBelief):
     """ActiveBelief for achieving acknowledgement from LLM on the current plan"""
     def evaluate(self, arg1, arg2):
 
-        print(f"arg1: {arg1}")
-        print(f"arg2: {arg2}")
+        # print(f"arg1: {arg1}")
+        # print(f"arg2: {arg2}")
 
-        # description = str(arg1).split("'")[3]
-        # plan = str(arg2).split("'")[1]
+        descr = str(arg1).split("'")[3]
+        plan = str(arg2).split("'")[3]
 
-        return True
+        print(f"\nPlan {plan} assessment for the scenario {descr}")
+
+        return False
