@@ -129,7 +129,8 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 ### Privacy features NoSql DB building
 
 ---------------
-bla bla bla
+* Set the proper variables im the file [create_nosql_db.py](create_nosql_db.py)
+* Run create_nosql_db.py to build the NoSql database.
 
 
 # Running IMMAGENE
