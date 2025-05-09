@@ -4,9 +4,16 @@ from tqdm import tqdm
 from ollama_inference import describe_image
 
 # Cartella contenente le immagini
-image_folder = "dipa_like"
+
 prompt = "Describe very briefly."
+
+# test dataset
+image_folder = "DIPA/images"
 output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
+
+# test dataset
+# image_folder = "DIPA_TEST"
+# output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
 
 # model = "llava:13b-v1.5-q6_K"
 model = "llava:34b-v1.6-fp16"

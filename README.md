@@ -7,7 +7,7 @@ for the evaluation of intelligent agent based on generative multi-modal narrativ
 ![Image 1](images/schema.jpg)
 
 
-# Installation
+# Requirements installation
 
 ---------------
 
@@ -97,3 +97,35 @@ In the case of using a mongoDB container, the latter can be accessed by the link
 > pip install openpyxl
 ```
 
+# Framework setup
+
+---------------
+bla bla bla
+
+
+### Asynchronous/Non-Asynchronous Meta-Reasoning
+
+---------------
+bla bla bla
+
+
+### Images description dataset preparation
+
+---------------
+This framework's meta-reasoning relies on the annotated images dataset [DIPA](https://dl.acm.org/doi/abs/10.1145/3581754.3584176).
+
+* Download the dataset from this [link](https://dl.acm.org/doi/suppl/10.1145/3581754.3584176/suppl_file/dataset.zip)
+* Set the proper variables in the file [create_img_descr.py](create_img_descr.py)
+* Run create_img_descr.py and build the images dataset descriptions in excel (output_excel).
+
+
+### Vect DB building
+
+---------------
+bla bla bla
+
+
+### Privacy feature DB building
+
+---------------
+bla bla bla
