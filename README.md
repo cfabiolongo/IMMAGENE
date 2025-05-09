@@ -113,14 +113,14 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 
 * Download the dataset from this [link](https://dl.acm.org/doi/suppl/10.1145/3581754.3584176/suppl_file/dataset.zip)
 * Set the proper variables in the file [create_img_descr.py](create_img_descr.py)
-* Run create_img_descr.py and build the images dataset descriptions in excel (output_excel).
+* Run the above create_img_descr.py and build the images dataset descriptions in excel (output_excel).
 
 
 ### Vect DB building
 
 ---------------
 * Set the proper variables in the file [create_vect_db.py](create_vect_db.py).
-* Run create_vect_db.py to build the sqlite3 vectorial database. 
+* Run the above create_vect_db.py to build the sqlite3 vectorial database. 
 * Run [inferece_vect_db.py](inferece_vect_db.py) to test the Vect DB with a text.
 
 
@@ -128,7 +128,8 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 
 ---------------
 * Set the proper variables im the file [create_nosql_db.py](create_nosql_db.py)
-* Run create_nosql_db.py to build the NoSql database.
+* Run the above create_nosql_db.py to build the NoSql database.
+* Run [query_nosql_db.py](query_nosql_db.py) to test the NoSql database (e.g 00b4064b073e51f3) 
 
 
 # Running IMMAGENE
