@@ -121,7 +121,7 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 ---------------
 * Set the proper variables in the file [create_vect_db.py](create_vect_db.py).
 * Run create_vect_db.py to build the sqlite3 vectorial database. 
-* Run [inferece_vect_db.py](inferece_vect_db.py) and the Vect DB with a text.
+* Run [inferece_vect_db.py](inferece_vect_db.py) to test the Vect DB with a text.
 
 
 ### Privacy features NoSql DB building
