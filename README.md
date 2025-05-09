@@ -122,10 +122,17 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 ### Vect DB building
 
 ---------------
+* Set the proper variables in the file [create_vect_db.py](create_vect_db.py).
+* Run create_vect_db.py to build the sqlite3 vectorial database. 
+
+
+### Privacy features NoSql DB building
+
+---------------
 bla bla bla
 
 
-### Privacy feature DB building
+# Running IMMAGENE
 
 ---------------
 bla bla bla

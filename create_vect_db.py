@@ -45,4 +45,4 @@ for _, row in tqdm(df.iterrows(), total=len(df), desc="Inserimento nel DB"):
 
 conn.commit()
 conn.close()
-print("✅ Database creato con successo.")
+print("✅ Database creation successful.")

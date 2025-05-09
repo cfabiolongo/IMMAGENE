@@ -48,4 +48,4 @@ for filename in tqdm(image_files, desc="Inferenza immagini"):
 df = pd.DataFrame(results)
 df.to_excel(output_excel, index=False)
 
-print(f"File salvato: {output_excel}")
+print(f"File saved: {output_excel}")
