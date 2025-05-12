@@ -12,8 +12,13 @@ for the evaluation of intelligent agent based on generative multi-modal narrativ
 This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), with the following packages versions:
 
 * [PHIDIAS](https://github.com/corradosantoro/phidias) (release 1.3.4.alpha) 
+* pillow (11.2.1)
+* opencv_python (4.11.0.86)
+* pandas (2.2.3)
+* openpyxl (3.1.5)
+* pymongo (4.12.0)
 
-### PHIDIAS
+### PHIDIAS installation
 
 ---------------
 
@@ -22,41 +27,6 @@ This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), w
 > cd phidias
 > pip install -r requirements.txt
 > pip install .
-```
-
-
-### pillow
-
----------------
-
-```sh
-> pip install pillow
-```
-
-### opencv
-
----------------
-
-```sh
-> pip install opencv-python
-```
-
-
-### Pandas
-
-
-```sh
-> pip install pandas
-> pip install openpyxl
-```
-
-
-### pymongo
-
----------------
-
-```sh
-> pip install pymongo
 ```
 
 
@@ -85,14 +55,6 @@ In the case MongoDB container, Mongo Express can be accessed by the link: http:/
 
 ```sh
 > docker-compose -f mongo.yaml up
-```
-
-### Pandas
-
-
-```sh
-> pip install pandas
-> pip install openpyxl
 ```
 
 ## Framework setup
