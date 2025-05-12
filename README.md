@@ -7,7 +7,9 @@ for the evaluation of intelligent agent based on generative multi-modal narrativ
 ![Image 1](images/schema.jpg)
 
 
-## Requirements
+### Requirements
+
+---------------
 
 This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), with the following packages versions:
 
