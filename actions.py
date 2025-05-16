@@ -1,9 +1,4 @@
 import sys
-import random
-import turtle
-import tkinter as tk
-from tkinter import messagebox
-import threading
 import queue
 
 # Coda per inviare richieste di query
@@ -21,30 +16,20 @@ from phidias.Types import *
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config_dtwin.ini')
+config.read('config.ini')
 
-# ONTOLOGY section
-FILE_NAME = config.get('ONTOLOGY', 'FILE_NAME')
-ONTO_NAME = config.get('ONTOLOGY', 'ONTO_NAME')
+# LLM Multi-Modal Section
+MM_HOST = config.get('MULTI_LLM', 'HOST')
+MM_MODEL = config.get('MULTI_LLM', 'MODEL')
+MM_TEMP = config.get('MULTI_LLM', 'TEMP')
+MM_SYSTEM = config.get('MULTI_LLM', 'SYSTEM')
 
-# REASONING Section
-REASONING_ACTIVE = config.getboolean('REASONING', 'ACTIVE')
-REASONER = config.get('REASONING', 'REASONER').split(",")
-PREFIXES = config.get('REASONING', 'PREFIXES').split(",")
-PREFIX = " ".join(PREFIXES)
-PREFIX = PREFIX + f"PREFIX {ONTO_NAME}: <http://test.org/{FILE_NAME}#> "
+# LLM text Section
+HOST = config.get('TEXT_LLM', 'HOST')
+MODEL = config.get('TEXT_LLM', 'MODEL')
+TEMP = config.get('TEXT_LLM', 'TEMP')
+SYSTEM = config.get('TEXT_LLM', 'SYSTEM')
 
-# BDI-CLASSES Section
-ENTITIES = config.get('CLASSES', 'Entities').split(",")
-
-# Properties
-BELIEFS = config.get('CLASSES', 'PHI-Beliefs').split(",")
-REACTORS = config.get('CLASSES', 'PHI-Reactors').split(",")
-DESIRES = config.get('CLASSES', 'PHI-Desires').split(",")
-INTENTIONS = config.get('CLASSES', 'PHI-Intentions').split(",")
-
-PROPERTIES = config.get('CLASSES', 'Properties').split(",")
-DATAS = config.get('CLASSES', 'Data').split(",")
 
 
 # ---------------------------------------------------------------------
@@ -128,4 +113,4 @@ class ack_plan(ActiveBelief):
 
         print(f"\nPlan {plan} assessment for the scenario {descr}")
 
-        return False
+        return True
