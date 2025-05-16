@@ -26,8 +26,11 @@ description = []
 
 def query_database(file_to_search, prompt):
 
-    client = MongoClient("mongodb://root:example@localhost:27018/")
-    # client = MongoClient('mongodb://localhost:27018/')
+    # with credentials
+    #client = MongoClient("mongodb://root:example@localhost:27017/")
+
+    # without credentials
+    client = MongoClient('mongodb://localhost:27017/')
 
     db = client['dipa']
     collection = db['annotations_collection']
@@ -100,7 +103,7 @@ def query_database(file_to_search, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    excel_path = "mismatch_risultati_test300.xlsx"
+    excel_path = "inferences/mismatch_risultati_test300.xlsx"
     df = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
