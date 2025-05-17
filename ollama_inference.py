@@ -65,3 +65,28 @@ def describe_image(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
             return f"Errore: {response.status_code} - {response.text}"
     except requests.exceptions.ConnectionError:
         return "Errore: impossibile connettersi a Ollama."
+
+
+
+
+def describe_image_status(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
+    image_base64 = image_to_base64(image_path)
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "images": [image_base64],
+        "temperature": temp,
+        "stream": False,
+        "top_k": 0,
+        "num_predict": 77  # vincolo testo generato a 77 token
+    }
+    try:
+        response = requests.post(OLLAMA_API_URL_MULTI, json=data)
+        if response.status_code == 200:
+            result = response.json()
+            return True, result.get("response", "Nessuna risposta dal modello.")
+        else:
+            error_message = f"Errore: {response.status_code} - {response.text}"
+            return False, error_message
+    except requests.exceptions.ConnectionError:
+        return False, "Errore: impossibile connettersi a Ollama."

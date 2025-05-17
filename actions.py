@@ -1,7 +1,7 @@
 import sys
 import queue
 from pymongo import MongoClient
-from ollama_inference import ask_ollama_stream, describe_image
+from ollama_inference import ask_ollama_stream, describe_image, describe_image_status
 
 # Coda per inviare richieste di query
 query_queue = queue.Queue()
@@ -123,10 +123,14 @@ class achieve_img_descr(Action):
         image_path = IMAGES_PATH+"/"+IMAGES
         print(f"Img path: {image_path}")
 
-        descr = describe_image(MM_HOST, image_path, MM_SYSTEM, MM_TEMP, MM_MODEL)
+        success, descr = describe_image_status(MM_HOST, image_path, MM_SYSTEM, MM_TEMP, MM_MODEL)
 
-        print(f"Img descr: {descr}")
-        self.assert_belief(DESCR(descr))
+        if success:
+            print(f"Img descr: {descr}")
+            self.assert_belief(DESCR(descr))
+        else:
+            print(descr)
+
 
 
 

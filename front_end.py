@@ -19,7 +19,7 @@ class main(Agent):
 
         # World initialization
         # init() >> [show_line("\nInitialiting agent...\n"), +DESCR("[IMAGE_DESCRIPTION]") ]
-        init() >> [show_line("\nAchieving img descr...\n"), achieve_img_descr()]
+        init() >> [show_line("\nAchieving img description. Waiting...\n"), achieve_img_descr()]
 
         +DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D)]
         +GOAL(D, G) >> [show_line("\nPlanning for the goal: ", G ," from the description ", D), formulate_plan(D, G)]
