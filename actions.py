@@ -112,11 +112,8 @@ class formulate_action(Action):
 
 
 class ack_plan(ActiveBelief):
-    """ActiveBelief for achieving acknowledgement from LLM on the current plan"""
+    """ActiveBelief for achieving acknowledgement from LLM for the current plan"""
     def evaluate(self, arg1, arg2):
-
-        # print(f"arg1: {arg1}")
-        # print(f"arg2: {arg2}")
 
         descr = str(arg1).split("'")[3]
         plan = str(arg2).split("'")[3]
@@ -193,7 +190,7 @@ def query_database(file_to_search):
     if result:
         print(f"\n📄 Document found for {file_to_search}:\n")
         result.pop('_id', None)
-        print(json.dumps(result, indent=2, ensure_ascii=False))
+        #print(json.dumps(result, indent=2, ensure_ascii=False))
 
         default_annotation = result.get('defaultAnnotation', {})
 
