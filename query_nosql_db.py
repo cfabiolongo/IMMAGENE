@@ -19,7 +19,7 @@ def query_database(file_to_search):
         default_annotation = result.get('defaultAnnotation', {})
 
         if not default_annotation:
-            print("⚠️ No fiedd 'defaultAnnotation' found in the document.")
+            print("⚠️ No field 'defaultAnnotation' found in the document.")
             return
 
         no_privacy_false_categories = []
@@ -33,11 +33,8 @@ def query_database(file_to_search):
 
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
-
-
-
     else:
-        print(f"\n❌ Nessun documento trovato per {file_to_search}")
+        print(f"\n❌ No documents found for {file_to_search}")
 
 if __name__ == "__main__":
     file_to_search = input("Insert the image file name (without extension) to be searched (e.g 00b4064b073e51f3): ").strip()
