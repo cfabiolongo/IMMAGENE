@@ -128,6 +128,33 @@ class ack_plan(ActiveBelief):
         privacy_threatening_list = query_database(file_to_search)
         print(f"\nPrivacy threatening items: {privacy_threatening_list}")
 
+        #SYSTEM_PROMPT = f""+SYSTEM
+
+        SYSTEM_PROMPT = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {privacy_threatening_list}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+
+        meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
+
+        # solo per modelli chain-of-thoughs (e.g. deedseek, qwen)
+        # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
+
+        #print(f"\nmeta-assessment: {meta_outcome}")
+
+        meta_outcome = meta_outcome.replace("\n", " ")
+
+        parti = meta_outcome.split(" ")
+
+        # Completa la lista con stringhe vuote se ha meno di 3 elementi
+        while len(parti) < 3:
+            parti.append("")
+
+        part1 = parti[0].strip()
+        part2 = parti[1].strip()
+        expl = ' '.join(parti[2:])
+
+        print(f"response: {part1}")
+        print(f"ft: {part2}")
+        print(f"expl: {expl}")
+
         return True
 
 

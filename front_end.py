@@ -28,4 +28,4 @@ class main(Agent):
 
 main().start()
 
-# PHIDIAS.achieve(init(), "main")
+PHIDIAS.achieve(init(), "main")
