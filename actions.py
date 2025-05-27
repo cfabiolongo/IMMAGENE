@@ -147,20 +147,21 @@ class ack_plan(ActiveBelief):
         while len(parti) < 3:
             parti.append("")
 
-        part1 = parti[0].strip()
-        part2 = parti[1].strip()
+        response = parti[0].strip()
+        features = parti[1].strip()
         expl = ' '.join(parti[2:])
 
-        print(f"response: {part1}")
-        print(f"ft: {part2}")
-        print(f"expl: {expl}")
+        print(f"- Response: {response}")
+        print(f"- #Features found: {features}")
+        print(f"- Explanation: {expl}")
 
-        return True
+        if response == "TRUE":
+            return True
+        else:
+            return False
 
 
 ################ Meta-Reasoning Section ################
-
-
 
 
 class achieve_img_descr(Action):
