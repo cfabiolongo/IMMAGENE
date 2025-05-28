@@ -5,79 +5,55 @@ from actions import *
 # PHIDIAS rules variable declaration
 # ---------------------------------------------------------------------
 
-def_vars("X", "Y", "D", "H", "Z", "L", "M", "A", "D", "W")
+def_vars("D", "G",  "P", "A", "X")
+
+class DESCR(Belief): pass
+
+class ACK(Reactor): pass
+
+class commit(Procedure): pass
+
 
 # ---------------------------------------------------------------------
 # Agents section
 # ---------------------------------------------------------------------
 
-def create_custom_agent(class_name):
+def create_agent(class_name):
     def main(self):
         # Custom intention
-        +TASK(X)[{'from': A}] >> [show_line("\nReceived belief TASK(",X,") from ", A), +TRIPLE(X,X,X), +TASK(X)[{'to': 'main'}]]
+        +DESCR(X)[{'from': A}] >> [-DESCR(X), show_line("\nReceived belief DESCR(",X,") from ", A), +ACK("TRUE")[{'to': 'main'}]]
 
     return type(class_name, (Agent,), {"main": main})
 
 
 # custom agent rocco
-globals()["rocco"] = create_custom_agent("rocco")
-instance = globals()["rocco"]()
+globals()["metaval"] = create_agent("metaval")
+instance = globals()["metaval"]()
 
 
 # ---------------------------------------------------------------------
 # Agent 'main'
 # ---------------------------------------------------------------------
 
+
+# Custom agent
+instance = globals()["metaval"]()
+instance.start()
+
+
 class main(Agent):
     def main(self):
 
-        # World initialization
-        init() >> [show_line("\nInitialiting Ontology...\n"), initWorld(), declareRules(), saveOnto()]
+        init() >> [show_line("\nAchieving img description. Waiting...\n"), achieve_img_descr()]
 
-        # Importing related triples
-        load() >> [show_line("\nAsserting all OWL 2 triples beliefs...\n"), assert_beliefs_triples(), show_line("\nTurning triples beliefs into Semas beliefs...\n"), turn()]
-        turn() / TRIPLE(X, "hasLedger",Z) >> [-TRIPLE(X,"hasLedger",Z), +LEDGER(X,"0"), AssignId(X), turn()]
+        +DESCR(D) >> [+DESCR(D)[{'to': "metaval"}], show_line("\nImage description achieved: ", D), formulate_goal(D)]
 
-        # desires
-        setup() / WORKTIME(W) >> [show_line("Setup worktime again...\n"), load(), -WORKTIME(W), +WORKTIME(0)]
-        setup() >> [show_line("Setup worktime...\n"), +WORKTIME(0), +MAX_WORK_TIME(Max_Work_Time), +MAX_WORKDAY_TIME(Max_WorkDay_Time), +REST_TIME(Rest_Time)]
-        work() >> [show_line("Starting task detection...\n"), Timer(Max_Work_Time).start(), TaskDetect().start(), show_line("Workers on duty...")]
+        +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> received ackowledgemt from ", A)]
 
-        # AssignJob intentions
-        +TASK(X, Y) / (AGT(A, D) & DUTY(D)) >> [show_line("assigning job to ",A), -DUTY(D), +TASK(X, Y, A)[{'to': A}]]
-
-        # ReceiveCommunication intentions
-        +COMM(X)[{'from': W}] / LEDGER(W, H) >> [show_line("received job done comm from ", W), -LEDGER(W, H), UpdateLedger(W, H)]
-
-        # Pause work intentions - check if the whole working time belief WORKTIME is greater-equal than MAX_WORKDAY_TIME
-        +TIMEOUT("ON") / (WORKTIME(X) & MAX_WORKDAY_TIME(Y) & geq(X,Y)) >> [show_line("\nWorkers are very tired. Finishing working day.\n"), TaskDetect().stop(), stopwork()]
-
-        # End work intentions - Add the MAX_WORK_TIME quantity (during the pause) to the whole working time belief WORKTIME
-        +TIMEOUT("ON") / (WORKTIME(X) & MAX_WORK_TIME(Y)) >> [show_line("\nWorkers are tired, they need some rest.\n"), TaskDetect().stop(), -WORKTIME(X), UpdateWorkTime(X, Y), noduty()]
-        noduty() / (AGT(A, D) & DUTY(D)) >> [show_line("Putting agent" , A, " to rest..."), -DUTY(D), noduty()]
-        noduty() / REST_TIME(X) >> [rest(X), work()]
-
-        # Stop work intention
-        stopwork() / (AGT(A, D) & DUTY(D)) >> [show_line("\n-------------------------> Stopping ", A), -DUTY(D), stopwork()]
-        stopwork() >> [show_line("\nAll workers were stopped. Starting payment process."), pay()]
-
-        # pay desires
-        pay() / LEDGER(Z, H) >> [show_line("\nSending payment to ",Z, " for ",H," tasks..."), -LEDGER(Z, H), pay()]
-        pay() >> [show_line("\nPayments completed.")]
-
-        # Sending belief to agent
-        send(A, X) >> [show_line("Sending belief TASK(",X,") to agent ", A), +AGT(A), +TASK(X)]
-        +TASK(X) / AGT(A) >> [-AGT(A), +TASK(X)[{'to': A}]]
-
-        +TASK(X)[{'from': W}] >> [show_line("received belief from ", W), +TRIPLE(X, X, X)]
-
-
-# Custom agent
-instance = globals()["rocco"]()
-instance.start()
+        #+GOAL(D, G) >> [show_line("\nPlanning for the goal: ", G, " from the description ", D), formulate_plan(D, G)]
+        #+PLAN(D, G, P) >> [show_line("\nActions implementation the plan ", P, " to achieve the goal ", G, " from the scenario ", D), formulate_action(D, G, P)]
+        #+ACTION(D, G, P, A) / ack_plan(D, P) >> [show_line("\nCommitting the action ", A, " implementing the plan ", P, ".")]
 
 main().start()
 
-# PHIDIAS.achieve(load(), "main")
-# PHIDIAS.achieve(setup(), "main")
-# PHIDIAS.achieve(work(), "main")
+# PHIDIAS.achieve(init(), "main")

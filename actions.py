@@ -56,6 +56,8 @@ IMAGES = config.get('INFERENCE', 'IMAGES_LIST')
 # Agent classes
 class init(Procedure): pass
 
+class setup(Procedure): pass
+
 class DESCR(Reactor): pass
 
 class PLAN(Reactor): pass
