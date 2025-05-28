@@ -49,7 +49,7 @@ class main(Agent):
         # Meta-reasoning - plan assessment delegation to agent metaval
         commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "Metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
 
-        +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> Received ackowledgemt ",X," from ", A)]
+        +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> Acknowledgment acquired ",X," from ", A, " <<<<<<<<\n")]
 
 main().start()
 

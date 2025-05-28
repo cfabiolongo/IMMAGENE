@@ -237,7 +237,7 @@ class achieve_img_descr(Action):
 
         if success:
             #print(f"Img descr: {descr}")
-            self.assert_belief(DESCR(descr))
+            self.assert_belief(DESCR(str(descr)))
         else:
             print(descr)
 
