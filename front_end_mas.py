@@ -14,7 +14,8 @@ def_vars("D", "G",  "P", "A", "X")
 def create_agent(class_name):
     def main(self):
         # Custom intention
-        +DESCR(D, P)[{'from': A}] >> [-DESCR(D, P), show_line("\nReceived belief DESCR(",D,") from ", A), compute_ack(D, P)]
+        +DESCR(D, P)[{'from': A}] / ack_plan(D, P) >> [-DESCR(D, P), show_line("\nReceived belief DESCR(",D,") from ", A), accept()]
+        +DESCR(D, P)[{'from': A}] >> [-DESCR(D, P), show_line("\nReceived belief DESCR(",D,") from ", A), refuse()]
 
         accept() >> [show_line("\n>>>>>>>> Accepting plan\n"), +ACK("TRUE")[{'to': 'main'}]]
         refuse() >> [show_line("\n>>>>>>>> Refusing plan\n"), +ACK("FALSE")[{'to': 'main'}]]
@@ -46,7 +47,7 @@ class main(Agent):
 
         achieve_plan() / (DESCR(D) & GOAL(G)) >> [show_line("\nPlanning for the goal: ", G, " from the description ", D), formulate_plan(D, G), commit()]
 
-        commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
+        commit() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [+DESCR(D, P)[{'to': "metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
 
         +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> received ackowledgemt ",X," from ", A)]
 

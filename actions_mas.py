@@ -62,14 +62,13 @@ class refuse(Procedure): pass
 
 class achieve_plan(Procedure): pass
 
-
 class commit(Procedure): pass
 
 class setup(Procedure): pass
 
 class PLAN(Belief): pass
 
-class GOAL(Reactor): pass
+class GOAL(Belief): pass
 
 class ACTION(Reactor): pass
 
@@ -87,7 +86,7 @@ class formulate_goal(Action):
 
         print("Formulating goal...")
         goal = "[FORMULATED_GOAL]"
-        self.assert_belief(GOAL(descr, goal))
+        self.assert_belief(GOAL(goal))
 
 
 class formulate_plan(Action):
@@ -102,7 +101,7 @@ class formulate_plan(Action):
 
         print("Formulating plan...")
         plan = "[FORMULATED_PLAN]"
-        self.assert_belief(PLAN(descr, goal, plan))
+        self.assert_belief(PLAN(plan))
 
 
 class formulate_action(Action):
