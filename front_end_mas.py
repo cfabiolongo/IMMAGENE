@@ -24,8 +24,8 @@ def create_agent(class_name):
 
 
 # custom agent rocco
-globals()["metaval"] = create_agent("metaval")
-instance = globals()["metaval"]()
+globals()["Metaval"] = create_agent("Metaval")
+instance = globals()["Metaval"]()
 
 
 # ---------------------------------------------------------------------
@@ -34,7 +34,7 @@ instance = globals()["metaval"]()
 
 
 # Custom agent
-instance = globals()["metaval"]()
+instance = globals()["Metaval"]()
 instance.start()
 
 
@@ -46,10 +46,10 @@ class main(Agent):
         setup() / DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D), achieve_plan()]
         achieve_plan() / (DESCR(D) & GOAL(G)) >> [show_line("\nPlanning for the goal: ", G, " from the description ", D), formulate_plan(D, G), commit()]
 
-        # Meta-reasoning - plan assession delegation
-        commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
+        # Meta-reasoning - plan assessment delegation to agent metaval
+        commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "Metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
 
-        +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> received ackowledgemt ",X," from ", A)]
+        +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> Received ackowledgemt ",X," from ", A)]
 
 main().start()
 
