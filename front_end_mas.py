@@ -45,7 +45,10 @@ class main(Agent):
 
         setup() / DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D), achieve_plan()]
         achieve_plan() / (DESCR(D) & GOAL(G)) >> [show_line("\nPlanning for the goal: ", G, " from the description ", D), formulate_plan(D, G), commit()]
-        commit() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [+DESCR(D, P)[{'to': "metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
+
+        # Meta-reasoning - plan assession delegation
+        commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "metaval"}], show_line("\n>>>>>>>> Communication started <<<<<<<<<\n")]
+
         +ACK(X)[{'from': A}] >> [show_line(">>>>>>>> received ackowledgemt ",X," from ", A)]
 
 main().start()
