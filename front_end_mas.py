@@ -59,6 +59,7 @@ class main(Agent):
         +ACK(X)[{'from': A}] >> [+CONSENT(X), show_line(">>>>>>>> Acknowledgment acquired ", X, " from ", A, " <<<<<<<<\n"), commit()]
         commit() / (PLAN(P) & CONSENT("TRUE")) >> [-CONSENT("TRUE"), show_line("\n>>>>>>>> Plan execution accepted <<<<<<<<<\n"), clear()]
         commit() / (PLAN(P) & CONSENT("FALSE")) >> [-CONSENT("FALSE"), show_line("\n>>>>>>>> Plan execution refused <<<<<<<<<\n"), clear()]
+        commit() / PLAN(P) >> [commit()]
         clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
 
 main().start()

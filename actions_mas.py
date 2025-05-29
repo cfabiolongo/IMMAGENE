@@ -11,7 +11,9 @@ from sentence_transformers import SentenceTransformer
 # pip install huggingface_hub[hf_xet]
 from sklearn.metrics.pairwise import cosine_similarity
 
-client = MongoClient("mongodb://localhost:27017/")
+# with credentials
+client = MongoClient("mongodb://root:example@localhost:27018/")
+# client = MongoClient("mongodb://localhost:27018/")
 db = client['dipa']
 collection = db['annotations_collection']
 
