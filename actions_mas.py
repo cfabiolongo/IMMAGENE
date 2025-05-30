@@ -11,12 +11,6 @@ from sentence_transformers import SentenceTransformer
 # pip install huggingface_hub[hf_xet]
 from sklearn.metrics.pairwise import cosine_similarity
 
-# with credentials
-client = MongoClient("mongodb://root:example@localhost:27018/")
-# client = MongoClient("mongodb://localhost:27018/")
-db = client['dipa']
-collection = db['annotations_collection']
-
 # Inizializza modello
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -37,6 +31,12 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+# databases parameters
+NOSQL_CONN = config.get('DATABASE', 'NOSQL_CONN')
+NOSQL_DB = config.get('DATABASE', 'NOSQL_DB')
+NOSQL_COLLECTION = config.get('DATABASE', 'NOSQL_COLLECTION')
+VECT_DB = config.get('DATABASE', 'VECT_DB')
+
 # LLM Multi-Modal Section
 MM_HOST = config.get('MULTI_LLM', 'HOST')
 MM_MODEL = config.get('MULTI_LLM', 'MODEL')
@@ -53,7 +53,11 @@ SYSTEM = config.get('TEXT_LLM', 'SYSTEM')
 IMAGES_PATH = config.get('INFERENCE', 'IMAGES_PATH')
 IMAGES = config.get('INFERENCE', 'IMAGES_LIST')
 
-
+# with credentials
+# client = MongoClient("mongodb://root:example@localhost:27018/")
+client = MongoClient(NOSQL_CONN)
+db = client[NOSQL_DB]
+collection = db[NOSQL_COLLECTION ]
 
 # Agent classes
 class init(Procedure): pass
@@ -84,7 +88,7 @@ class CONSENT(Belief): pass
 
 
 class formulate_goal(Action):
-    """Formulate goal from imahge description"""
+    """Formulate goal from image description"""
     def execute(self, arg):
         # print(f"arg1: {arg}")
         descr = str(arg).split("'")[3]
@@ -303,7 +307,7 @@ class achieve_img_descr(Action):
 def find_most_similar(input_text):
     input_embedding = model.encode(input_text).astype(np.float32)
 
-    conn = sqlite3.connect('inferences/image_descriptions_t08_34b_brief.db')
+    conn = sqlite3.connect(VECT_DB)
     c = conn.cursor()
     c.execute('SELECT id, file_image_name, description, embedding FROM immagini')
     rows = c.fetchall()

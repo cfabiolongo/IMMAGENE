@@ -7,12 +7,13 @@ from ollama_inference import ask_ollama_stream
 # llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K, mistral:7b-instruct-q8_0
 
 # work (172.16.61.73):
-# llama3.3:70b-instruct-fp16, qwen2.5:14b-instruct-q8_0, qwen2.5:72b-instruct-fp16
+# server: llama3.3:70b-instruct-fp16, qwen2.5:72b-instruct-fp16, llama4:17b-scout-16e-instruct-q8_0
+# local: qwen2.5:14b-instruct-q8_0
 
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "qwen2.5:72b-instruct-fp16"
+text_model = "llama4:17b-scout-16e-instruct-q8_0"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -61,10 +62,10 @@ def query_database(file_to_search, prompt):
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
 
-        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         # zero-shot
-        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
@@ -103,7 +104,8 @@ def query_database(file_to_search, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    excel_path = "inferences/mismatch_risultati_test300.xlsx"
+    # full: risultati_validazione_test300.xlsx, ground truth matched: match_risultati_test300.xlsx, non-ground truth matched: mismatch_risultati_test300.xlsx
+    excel_path = "inferences/risultati_validazione_test300.xlsx"
     df = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
@@ -121,12 +123,11 @@ if __name__ == "__main__":
                 query_database(file_name.split('.')[0], descr)
 
         print(len(file_dipa))
-        print(len(response))
-        print(len(ground_truth_number))
-        print(len(extracted_features))
-        print(len(explanation))
-        print(len(description))
-
+        # print(len(response))
+        # print(len(ground_truth_number))
+        # print(len(extracted_features))
+        # print(len(explanation))
+        # print(len(description))
 
         # Creazione del DataFrame
         df = pd.DataFrame({
@@ -139,6 +140,6 @@ if __name__ == "__main__":
         })
 
         output_df = pd.DataFrame(df)
-        output_path = "meta_mismatch_qwen2.5_72b-instruct-fp16.xlsx"
+        output_path = "meta_zeroshot_llama4:17b-scout.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")

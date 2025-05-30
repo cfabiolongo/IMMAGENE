@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'meta_mismatch_qwen2.5_72b-instruct-fp16.xlsx'
+file_path = 'meta_mismatch_llama4:17b-scout.xlsx'
 df = pd.read_excel(file_path)
 
 # True Positive
@@ -12,6 +12,8 @@ FP = len(df[(df['response'] == True) & (df['ground_truth_ft_number'] == 0)])
 FN = len(df[(df['response'] == False) & (df['ground_truth_ft_number'] > 0)])
 # True Negative
 TN = len(df[(df['response'] == False) & (df['ground_truth_ft_number'] == 0)])
+
+print(f"TP: {TP}, FP: {FP}, FN: {FN}, TN: {TN}")
 
 # Metriche
 precision = TP / (TP + FP) if (TP + FP) > 0 else 0
@@ -25,7 +27,7 @@ total_ground_truth = df['ground_truth_ft_number'].sum()
 total_extracted = df['extracted_features'].sum()
 
 # Rapporto estratti / ground truth in percentuale
-extracted_to_ground_truth_ratio = (total_extracted / total_ground_truth * 100) if total_ground_truth > 0 else 0
+extracted_to_ground_truth_ratio = ((total_extracted / total_ground_truth) * 100) if total_ground_truth > 0 else 0
 
 # Stampa risultati
 print(f"Accuracy: {accuracy:.3f}")
