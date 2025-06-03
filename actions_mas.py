@@ -93,7 +93,7 @@ class actuate_plan(Action):
     """Formulate goal from image description"""
     def execute(self, arg):
         descr = str(arg).split("'")[3]
-        print(f"Actuating plan: {descr}.")
+        print(f"\nActuating plan: {descr}.")
 
 
 class formulate_goal(Action):
@@ -147,7 +147,7 @@ class ack_descr(ActiveBelief):
 
         descr = str(arg1).split("'")[3]
 
-        print(f"\nScenario assessmnt: {descr}...")
+        print(f"\nScenario assessment: {descr}...")
 
         result = find_most_similar(descr)
         print("\n🔍 Closer result:")
