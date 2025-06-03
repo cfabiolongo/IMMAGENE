@@ -72,6 +72,8 @@ class commit(Procedure): pass
 
 class clear(Procedure): pass
 
+class assess(Procedure): pass
+
 class setup(Procedure): pass
 
 class PLAN(Belief): pass
@@ -85,6 +87,13 @@ class DESCR(Belief): pass
 class ACK(Reactor): pass
 
 class CONSENT(Belief): pass
+
+
+class actuate_plan(Action):
+    """Formulate goal from image description"""
+    def execute(self, arg):
+        descr = str(arg).split("'")[3]
+        print(f"Actuating plan: {descr}.")
 
 
 class formulate_goal(Action):
@@ -147,8 +156,6 @@ class ack_descr(ActiveBelief):
         file_to_search = result['file_image_name'].split(".")[0]
         privacy_threatening_list = query_database(file_to_search)
         print(f"\nPrivacy threatening items: {privacy_threatening_list}")
-
-        #SYSTEM_PROMPT = f""+SYSTEM
 
         SYSTEM_PROMPT = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {privacy_threatening_list}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
