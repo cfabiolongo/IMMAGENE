@@ -1,4 +1,5 @@
 import sys
+import os
 import queue
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream, describe_image_status
@@ -11,8 +12,22 @@ from sentence_transformers import SentenceTransformer
 # pip install huggingface_hub[hf_xet]
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Inizializza modello
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Percorso locale dove salvare il modello
+MODEL_DIR = "./all-MiniLM-L6-v2"
+
+def load_or_download_model(model_dir):
+    if os.path.isdir(model_dir) and os.path.exists(os.path.join(model_dir, 'config.json')):
+        print(f"✅ Modello trovato localmente in: {model_dir}")
+        model = SentenceTransformer(model_dir)
+    else:
+        print(f"⬇️  Modello non trovato, scarico da Hugging Face e salvo in: {model_dir}")
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+        model.save(model_dir)
+        print("💾 Modello salvato localmente.")
+    return model
+
+# Esegui caricamento
+model = load_or_download_model(MODEL_DIR)
 
 # Coda per inviare richieste di query
 query_queue = queue.Queue()
@@ -141,7 +156,7 @@ class formulate_action(Action):
         self.assert_belief(ACTION(descr, goal, plan, action))
 
 
-class ack_descr(ActiveBelief):
+class ack_noplan(ActiveBelief):
     """ActiveBelief for achieving acknowledgement from LLM for the current plan"""
     def evaluate(self, arg1):
 
@@ -157,11 +172,12 @@ class ack_descr(ActiveBelief):
         privacy_threatening_list = query_database(file_to_search)
         print(f"\nPrivacy threatening items: {privacy_threatening_list}")
 
-        SYSTEM_PROMPT = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {privacy_threatening_list}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        list_str = ", ".join(privacy_threatening_list)
+        SYSTEM_PROMPT = SYSTEM.replace("[LIST]", list_str)
 
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
 
-        # solo per modelli chain-of-thoughs (e.g. deedseek, qwen)
+        # solo per modelli chain-of-thoughs (e.g. deepseek, qwen)
         # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
 
         #print(f"\nmeta-assessment: {meta_outcome}")

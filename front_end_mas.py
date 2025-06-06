@@ -18,7 +18,7 @@ def create_agent(class_name):
         +DESCR(D, P)[{'from': A}] >> [-DESCR(D, P), show_line("\nReceived belief DESCR(",D,") from ", A), accept()]
 
         # Non-Related-Plan assessment
-        +DESCR(D)[{'from': A}] / ack_descr(D) >> [-DESCR(D), show_line("\nReceived belief DESCR(", D, ") from ", A), refuse()]
+        +DESCR(D)[{'from': A}] / ack_noplan(D) >> [-DESCR(D), show_line("\nReceived belief DESCR(", D, ") from ", A), refuse()]
         +DESCR(D)[{'from': A}] >> [-DESCR(D), show_line("\nReceived belief DESCR(", D, ") from ", A), accept()]
 
         accept() >> [show_line("\n>>>>>>>> Accepting plan <<<<<<<<<<\n"), +ACK("TRUE")[{'to': 'main'}]]
@@ -66,7 +66,7 @@ class main(Agent):
 
         commit() / (PLAN(P) & CONSENT("TRUE")) >> [-CONSENT("TRUE"), show_line("\n>>>>>>>> No objection for plan actuation <<<<<<<<<\n"), actuate_plan(P), clear()]
         commit() / (PLAN(P) & CONSENT("FALSE")) >> [-CONSENT("FALSE"), show_line("\n>>>>>>>> The plan cannot be actuated due to privacy issues <<<<<<<<<\n"), clear()]
-        commit() / PLAN(P) >> [commit()]
+        commit() / PLAN(P) >> [commit(), show_line(">>>>>>>> WAITING...........")]
         clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
 
 main().start()

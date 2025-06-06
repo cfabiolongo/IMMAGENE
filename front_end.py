@@ -22,8 +22,9 @@ class main(Agent):
         +DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D)]
         +GOAL(D, G) >> [show_line("\nPlanning for the goal: ", G ," from the description ", D), formulate_plan(D, G)]
         +PLAN(D, G, P) >> [show_line("\nActions implementation the plan ", P, " to achieve the goal ", G, " from the scenario ",D), formulate_action(D, G, P)]
-        +ACTION(D, G, P, A) / ack_plan(D, P) >> [show_line("\nCommitting the action ", A, " implementing the plan ", P, ".")]
+        +ACTUATION(D, G, P, A) / ack_plan(D, P) >> [show_line("\nNo objection."), actuate_plan(P, A)]
+        +ACTUATION(D, G, P, A) >> [show_line("\nThe plan cannot be actuated.")]
 
 main().start()
 
-PHIDIAS.achieve(init(), "main")
+# PHIDIAS.achieve(init(), "main")

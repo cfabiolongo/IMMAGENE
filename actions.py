@@ -1,4 +1,5 @@
 import sys
+import os
 import queue
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream, describe_image_status
@@ -15,9 +16,22 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client['dipa']
 collection = db['annotations_collection']
 
-# Inizializza modello
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Percorso locale dove salvare il modello
+MODEL_DIR = "./all-MiniLM-L6-v2"
 
+def load_or_download_model(model_dir):
+    if os.path.isdir(model_dir) and os.path.exists(os.path.join(model_dir, 'config.json')):
+        print(f"✅ Modello trovato localmente in: {model_dir}")
+        model = SentenceTransformer(model_dir)
+    else:
+        print(f"⬇️  Modello non trovato, scarico da Hugging Face e salvo in: {model_dir}")
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+        model.save(model_dir)
+        print("💾 Modello salvato localmente.")
+    return model
+
+# Esegui caricamento
+model = load_or_download_model(MODEL_DIR)
 # Coda per inviare richieste di query
 query_queue = queue.Queue()
 
@@ -64,11 +78,21 @@ class PLAN(Reactor): pass
 
 class GOAL(Reactor): pass
 
-class ACTION(Reactor): pass
+class ACTUATION(Reactor): pass
+
+
+
+class actuate_plan(Action):
+    """Formulate goal from image description"""
+    def execute(self, arg1, arg2):
+        plan = str(arg1).split("'")[3]
+        act = str(arg2).split("'")[3]
+        print(f"\nActuating plan: {plan} with {act}.")
+
 
 
 class formulate_goal(Action):
-    """Formulate goal from imahge description"""
+    """Formulate goal from image description"""
     def execute(self, arg):
         # print(f"arg1: {arg}")
         descr = str(arg).split("'")[3]
@@ -109,7 +133,7 @@ class formulate_action(Action):
 
         print("Formulating action...")
         action = "[FORMULATED_ACTION]"
-        self.assert_belief(ACTION(descr, goal, plan, action))
+        self.assert_belief(ACTUATION(descr, goal, plan, action))
 
 
 
@@ -130,9 +154,8 @@ class ack_plan(ActiveBelief):
         privacy_threatening_list = query_database(file_to_search)
         print(f"\nPrivacy threatening items: {privacy_threatening_list}")
 
-        #SYSTEM_PROMPT = f""+SYSTEM
-
-        SYSTEM_PROMPT = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {privacy_threatening_list}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        list_str = ", ".join(privacy_threatening_list)
+        SYSTEM_PROMPT = SYSTEM.replace("[LIST]", list_str)
 
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
 
@@ -158,9 +181,9 @@ class ack_plan(ActiveBelief):
         print(f"- Explanation: {expl}")
 
         if response == "TRUE":
-            return True
-        else:
             return False
+        else:
+            return True
 
 
 ################ Meta-Reasoning Section ################
