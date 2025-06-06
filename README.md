@@ -83,7 +83,7 @@ as follows:
 eShell: main >init()
 ```
 
-The production rules reported below, after the image's descriptiion acquisition, will simulate a Goal/Plan/Action formulation, whereas
+The production rules reported below, after the image's description acquisition, will simulate a Goal/Plan/Action formulation, whereas
 actuate_plan(P,A) will be executed only when the active-belief ack_plan(D,P) is *True*.
 
 ```sh
