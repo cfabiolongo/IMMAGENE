@@ -70,7 +70,7 @@ or LLMs is required for self-correction and refinement of results. For both mono
 
 ### Mono-agent Meta-reasoning 
 
-After running immagene.py, to start inference on the images in IMAGES_LIST (group **[INFERENCE]** of config.ini), the command init() must be lanched in the PHIDIAS shell
+After running [immagene.py](immagene.py), to start inference on the images in IMAGES_LIST (group **[INFERENCE]** of config.ini), the command init() must be lanched in the PHIDIAS shell
 as follows:
 
 ```sh
@@ -99,7 +99,7 @@ init() >> [show_line("Achieving img description. Waiting..."), achieve_img_descr
 ### Multi-agent Meta-reasoning 
 
 ---------------
-As for multi-agent settings, two distinct agents types were implemented, both interacting with a
+As for multi-agent settings, by running [immagene_mas.py](immagene_mas.py), two distinct agents types were implemented, both interacting with a
 further agent *Metaval* delegated to meta-reasoning:
 
 * Metaval
@@ -109,6 +109,9 @@ further agent *Metaval* delegated to meta-reasoning:
 #### *Metaval* agent
 
 ---------------
+
+The *Metaval agent*, running in a parallel thread, will receive scenario descriptions and plans for privacy-aware evaluation, for both Related Plan/Non-Related Plan assessment.
+In any case, it will send the acknowledgment for plan's execution.
 
 ```sh
 # Related-Plan assessment
@@ -127,6 +130,9 @@ refuse() >> [show_line(">>>>>>>> Refusing plan <<<<<<<<<<"), +ACK("FALSE")[{'to'
 
 ---------------
 
+In this setting, although the interaction with the agent *Metaval* acting in another thread, the main agent must wait for the plan’s assessment before its
+actuation, i.e., there will not be effective parallel meta-reasoning computing.
+
 ```sh
 init() >> [show_line("\nAchieving img description. Waiting...\n"), achieve_img_descr(), setup()]
 setup() / DESCR(D) >> [show_line(">>>>>>>> Communication started <<<<<<<<<"), +DESCR(D)[{'to': "Metaval"}], formulate_goal(D), achieve_plan()]
@@ -144,6 +150,8 @@ clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
 #### Scenario assessing agents
 
 ---------------
+
+This is the setting involving an effective-parallel scenario assessment achieved with the agent Metaval, but *regardless of the plan*.
 
 ```sh
 init() >> [show_line("Achieving img description. Waiting..."), achieve_img_descr(), setup()]
