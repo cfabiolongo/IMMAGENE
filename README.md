@@ -70,7 +70,7 @@ or LLMs is required for self-correction and refinement of results. For both mono
 
 ### Mono-agent Meta-reasoning 
 
-After running immagene.py, to start inference on the images in IMAGES_LIST (group [INFERENCE] of config.ini), the command init() must be lanched in the PHIDIAS
+After running immagene.py, to start inference on the images in IMAGES_LIST (group **[INFERENCE]** of config.ini), the command init() must be lanched in the PHIDIAS shell
 as follows:
 
 ```sh
@@ -84,12 +84,12 @@ eShell: main >init()
 ```
 
 The production rules reported below, after the image's description acquisition, will simulate a Goal/Plan/Action formulation, whereas
-actuate_plan(P,A) will be executed only when the active-belief ack_plan(D,P) is *True*.
+actuate_plan(P,A) will be executed only when the *active-belief* ack_plan(D,P) is *True*.
 
 ```sh
-init() >> [show_line("Achieving img description. Waiting...\n"), achieve_img_descr()]
-+DESCR(D) >> [show_line("\nImage description achieved: ", D), formulate_goal(D)]
-+GOAL(D, G) >> [show_line("No objection.", D), formulate_plan(D, G)]
+init() >> [show_line("Achieving img description. Waiting..."), achieve_img_descr()]
++DESCR(D) >> [formulate_goal(D)]
++GOAL(D, G) >> [formulate_plan(D, G)]
 +PLAN(D, G, P) >> [formulate_action(D, G, P)]
 +ACTUATION(D, G, P, A) / ack_plan(D, P) >> [show_line("No objection."), actuate_plan(P, A)] 
 +ACTUATION(D, G, P, A) >> [show_line("The plan cannot be actuated.")]
@@ -99,9 +99,63 @@ init() >> [show_line("Achieving img description. Waiting...\n"), achieve_img_des
 ### Multi-agent Meta-reasoning 
 
 ---------------
-bla bla bla
+As for multi-agent settings, two distinct agents types were implemented, both interacting with a
+further agent *Metaval* delegated to meta-reasoning:
 
+* Metaval
+* Scenario/Plan assessing agents
+* Scenario assessing agent
 
+#### *Metaval* agent
+
+---------------
+
+```sh
+# Related-Plan assessment
++DESCR(D, P)[{'from': A}] / ack_plan(D, P) >> [-DESCR(D, P), show_line("Received belief DESCR(",D,") from ", A), refuse()]
++DESCR(D, P)[{'from': A}] >> [-DESCR(D, P), show_line("Received belief DESCR(",D,") from ", A), accept()]
+
+# Non-Related-Plan assessment
++DESCR(D)[{'from': A}] / ack_noplan(D) >> [-DESCR(D), show_line("Received belief DESCR(", D, ") from ", A), refuse()]
++DESCR(D)[{'from': A}] >> [-DESCR(D), show_line("Received belief DESCR(", D, ") from ", A), accept()]
+
+accept() >> [show_line(">>>>>>>> Accepting plan <<<<<<<<<<"), +ACK("TRUE")[{'to': 'main'}]]
+refuse() >> [show_line(">>>>>>>> Refusing plan <<<<<<<<<<"), +ACK("FALSE")[{'to': 'main'}]]
+```
+
+#### Scenario/Plan assessing agents
+
+---------------
+
+```sh
+init() >> [show_line("\nAchieving img description. Waiting...\n"), achieve_img_descr(), setup()]
+setup() / DESCR(D) >> [show_line(">>>>>>>> Communication started <<<<<<<<<"), +DESCR(D)[{'to': "Metaval"}], formulate_goal(D), achieve_plan()]
+
+achieve_plan() / (DESCR(D) & GOAL(G)) >> [show_line("Planning for the goal: ", G, " from the description ", D), formulate_plan(D, G)]
+
++ACK(X)[{'from': A}] >> [+CONSENT(X), show_line(">>>>>>>> Acknowledgment acquired ", X, " from ", A, " <<<<<<<<"), commit()]
+
+commit() / (PLAN(P) & CONSENT("TRUE")) >> [-CONSENT("TRUE"), show_line(">>>>>>>> No objection for plan actuation <<<<<<<<<"), actuate_plan(P), clear()]
+commit() / (PLAN(P) & CONSENT("FALSE")) >> [-CONSENT("FALSE"), show_line(">>>>>>>> The plan cannot be actuated due to privacy issues <<<<<<<<<"), clear()]
+commit() / PLAN(P) >> [commit(), show_line(">>>>>>>> WAITING...........")]
+clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
+```
+
+#### Scenario assessing agents
+
+---------------
+
+```sh
+init() >> [show_line("Achieving img description. Waiting..."), achieve_img_descr(), setup()]
+setup() / DESCR(D) >> [show_line("Image description achieved: ", D), formulate_goal(D), achieve_plan()]
+achieve_plan() / (DESCR(D) & GOAL(G)) >> [show_line("Planning for the goal: ", G, " from the description ", D), formulate_plan(D, G), commit()]
+commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "Metaval"}], show_line(">>>>>>>> Communication started <<<<<<<<<")]
+
++ACK("TRUE")[{'from': A}] / PLAN(P) >> [show_line(">>>>>>>> No objection for plan actuation <<<<<<<<"), actuate_plan(P), clear()]
++ACK("FALSE")[{'from': A}] / PLAN(P) >> [show_line(">>>>>>>> The plan cannot be actuated due to privacy issues <<<<<<<<"), clear()]
+
+clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
+```
 
 ### Images description dataset preparation
 
@@ -126,9 +180,4 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 ---------------
 * Set the proper variables im the file [create_nosql_db.py](create_nosql_db.py)
 * Run the above create_nosql_db.py to build the NoSql database.
-* Run [query_nosql_db.py](query_nosql_db.py) to test the NoSql database (e.g 00b4064b073e51f3) 
-
-
-## Running IMMAGENE
-
-bla bla bla
+* Run [query_nosql_db.py](query_nosql_db.py) to test the NoSql database (e.g 00b4064b073e51f3)
