@@ -1,5 +1,10 @@
 import pandas as pd  # aggiunto per leggere il file Excel
 from pymongo import MongoClient
+
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from ollama_inference import ask_ollama_stream
 
 
