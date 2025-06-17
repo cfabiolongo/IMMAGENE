@@ -17,8 +17,8 @@ def create_database():
     collection = db['annotations_collection']
 
     # 2. Directory containing JSON files
-    # directory = r'/home/fabio/Immagini/DIPA/annotations/CrowdWorks/labels'
-    directory = "C:/Users/fabio/Pictures/DIPA/annotations/CrowdWorks/labels"
+    directory = r'/home/fabio/Immagini/DIPA/annotations/CrowdWorks/labels'
+    # directory = "C:/Users/fabio/Pictures/DIPA/annotations/CrowdWorks/labels"
 
     # 3. Unique index Creation on 'file_name'
     collection.create_index('file_name', unique=True)
