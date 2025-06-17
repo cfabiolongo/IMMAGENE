@@ -10,8 +10,8 @@ from pymongo.errors import DuplicateKeyError
 def create_database():
 
     # 1. Connecting to MongoDB
-    # client = MongoClient('mongodb://localhost:27017/')
-    client = MongoClient("mongodb://root:example@localhost:27018/")
+    client = MongoClient('mongodb://localhost:27017/')
+    # client = MongoClient("mongodb://root:example@localhost:27018/")
 
     db = client['dipa']
     collection = db['annotations_collection']
@@ -23,7 +23,7 @@ def create_database():
     # 3. Unique index Creation on 'file_name'
     collection.create_index('file_name', unique=True)
 
-    # 4. Readind and inserting JSON files
+    # 4. Reading and inserting JSON files
     for filename in os.listdir(directory):
         if filename.endswith('.json'):
             filepath = os.path.join(directory, filename)
