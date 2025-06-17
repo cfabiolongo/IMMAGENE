@@ -10,7 +10,11 @@ from pymongo.errors import DuplicateKeyError
 def create_database():
 
     # 1. Connecting to MongoDB
+
+    # without credentials
     client = MongoClient('mongodb://localhost:27017/')
+
+    # with credentials
     # client = MongoClient("mongodb://root:example@localhost:27018/")
 
     db = client['dipa']
