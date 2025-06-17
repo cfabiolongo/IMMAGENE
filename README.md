@@ -61,9 +61,9 @@ In the case MongoDB container, Mongo Express can be accessed by the link: http:/
 
 ## Framework setup
 
-Immagene can implemented in mono- and multi-agent setting. In the latter, the meta-reasoning process is fulfilled by a parallel-local agent,
-acting in another thread than respect to the main agent. The choice between mono- and multi-agent setting ultimately depends on the specific
-use case and domain. Generally, the key advantage of a multi-agent architecture lies in its use of separate threads per agent, each maintaining
+Immagene can instantiated in mono- and multi-agent setting. In the latter, the meta-reasoning process is fulfilled by a *parallel-local* agent,
+acting in another thread than the main agent. The choice between mono- and multi-agent setting ultimately depends on the specific
+use-case and domain. Generally, the key advantage of a multi-agent architecture lies in its use of separate threads per agent, each maintaining
 an independent KB. This structural separation allows for more accurate control when integrating sensor data that translates external information into
 beliefs. Moreover, it is particularly advantageous in scenarios involving multiple Metaval-type agents, where aggregating outputs from multiple tasks
 or LLMs is required for self-correction and refinement of results. For both mono- and multi-agent setting, all required parameters must be set in [config.ini](config.ini).
