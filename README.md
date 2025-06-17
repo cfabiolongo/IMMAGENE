@@ -61,7 +61,7 @@ In the case MongoDB container, Mongo Express can be accessed by the link: http:/
 
 ## Framework setup
 
-Immagene can instantiated in mono- and multi-agent setting. In the latter, the meta-reasoning process is fulfilled by a *parallel-local* agent,
+IMMAGENE can instantiated in mono- and multi-agent setting. In the latter, the meta-reasoning process is fulfilled by a *parallel-local* agent,
 acting in another thread than the main agent. The choice between mono- and multi-agent setting ultimately depends on the specific
 use-case and domain. Generally, the key advantage of a multi-agent architecture lies in its use of separate threads per agent, each maintaining
 an independent KB. This structural separation allows for more accurate control when integrating sensor data that translates external information into
@@ -99,7 +99,7 @@ init() >> [show_line("Achieving img description. Waiting..."), achieve_img_descr
 ### Multi-agent Meta-reasoning 
 
 ---------------
-As for multi-agent settings, by running [immagene_mas.py](immagene_mas.py), two distinct agents types were implemented, both interacting with a
+As for multi-agent settings, by running [immagene_mas.py](immagene_mas.py) and *init()* in the shell, two distinct agents types were implemented, both interacting with a
 further agent *Metaval* delegated to meta-reasoning:
 
 * Metaval
