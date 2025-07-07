@@ -3,7 +3,6 @@ import os
 import queue
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream, describe_image_status
-import json
 
 import sqlite3
 import numpy as np
@@ -16,7 +15,7 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client['dipa']
 collection = db['annotations_collection']
 
-# Percorso locale dove salvare il modello
+# Local path to save the embedding model
 MODEL_DIR = "./all-MiniLM-L6-v2"
 
 def load_or_download_model(model_dir):
@@ -30,13 +29,8 @@ def load_or_download_model(model_dir):
         print("💾 Modello salvato localmente.")
     return model
 
-# Esegui caricamento
+# loading model
 model = load_or_download_model(MODEL_DIR)
-# Coda per inviare richieste di query
-query_queue = queue.Queue()
-
-# Coda per restituire i risultati delle query
-result_queue = queue.Queue()
 
 sys.path.insert(0, "../lib")
 
@@ -159,7 +153,7 @@ class ack_plan(ActiveBelief):
 
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
 
-        # solo per modelli chain-of-thoughs (e.g. deedseek, qwen)
+        # only for chain-of-thoughs models (e.g. deedseek, qwen)
         # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
 
         #print(f"\nmeta-assessment: {meta_outcome}")
@@ -168,7 +162,7 @@ class ack_plan(ActiveBelief):
 
         parti = meta_outcome.split(" ")
 
-        # Completa la lista con stringhe vuote se ha meno di 3 elementi
+        # Fill the list with empty strings if it has less than 3 elements
         while len(parti) < 3:
             parti.append("")
 
@@ -208,7 +202,7 @@ class achieve_img_descr(Action):
 def find_most_similar(input_text):
     input_embedding = model.encode(input_text).astype(np.float32)
 
-    conn = sqlite3.connect('inferences/image_descriptions_t08_34b_brief.db')
+    conn = sqlite3.connect('validation/inferences/image_descriptions_t08_34b_brief.db')
     c = conn.cursor()
     c.execute('SELECT id, file_image_name, description, embedding FROM immagini')
     rows = c.fetchall()
@@ -243,7 +237,6 @@ def query_database(file_to_search):
     if result:
         print(f"\n📄 Document found for {file_to_search}:\n")
         result.pop('_id', None)
-        #print(json.dumps(result, indent=2, ensure_ascii=False))
 
         default_annotation = result.get('defaultAnnotation', {})
 

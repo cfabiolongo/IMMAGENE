@@ -3,7 +3,6 @@ import os
 import queue
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream, describe_image_status
-import json
 
 import sqlite3
 import numpy as np
@@ -26,14 +25,8 @@ def load_or_download_model(model_dir):
         print("💾 Modello salvato localmente.")
     return model
 
-# Esegui caricamento
+# loading model
 model = load_or_download_model(MODEL_DIR)
-
-# Coda per inviare richieste di query
-query_queue = queue.Queue()
-
-# Coda per restituire i risultati delle query
-result_queue = queue.Queue()
 
 sys.path.insert(0, "../lib")
 
@@ -177,7 +170,7 @@ class ack_noplan(ActiveBelief):
 
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
 
-        # solo per modelli chain-of-thoughs (e.g. deepseek, qwen)
+        # only for chain-of-thoughs models (e.g. deepseek)
         # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
 
         #print(f"\nmeta-assessment: {meta_outcome}")
@@ -186,7 +179,7 @@ class ack_noplan(ActiveBelief):
 
         parti = meta_outcome.split(" ")
 
-        # Completa la lista con stringhe vuote se ha meno di 3 elementi
+        # Fill the list with empty strings if it has less than 3 elements
         while len(parti) < 3:
             parti.append("")
 
@@ -231,7 +224,7 @@ class ack_plan(ActiveBelief):
 
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
 
-        # solo per modelli chain-of-thoughs (e.g. deedseek, qwen)
+        # only for chain-of-thoughs models (e.g. deepseek)
         # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
 
         #print(f"\nmeta-assessment: {meta_outcome}")
@@ -240,7 +233,7 @@ class ack_plan(ActiveBelief):
 
         parti = meta_outcome.split(" ")
 
-        # Completa la lista con stringhe vuote se ha meno di 3 elementi
+        # Fill the list with empty strings if it has less than 3 elements
         while len(parti) < 3:
             parti.append("")
 
@@ -256,55 +249,6 @@ class ack_plan(ActiveBelief):
             return True
         else:
             return False
-
-
-class compute_ack(Action):
-    """ActiveBelief for achieving acknowledgement from LLM for the current plan"""
-    def evaluate(self, arg1, arg2):
-
-        descr = str(arg1).split("'")[3]
-        plan = str(arg2).split("'")[3]
-
-        print(f"\nPlan {plan} assessment for the scenario {descr}...")
-
-        result = find_most_similar(descr)
-        print("\n🔍 Closer result:")
-        print(result)
-
-        file_to_search = result['file_image_name'].split(".")[0]
-        privacy_threatening_list = query_database(file_to_search)
-        print(f"\nPrivacy threatening items: {privacy_threatening_list}")
-
-        SYSTEM_PROMPT = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {privacy_threatening_list}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
-
-        meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
-
-        # solo per modelli chain-of-thoughs (e.g. deedseek, qwen)
-        # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
-
-        #print(f"\nmeta-assessment: {meta_outcome}")
-
-        meta_outcome = meta_outcome.replace("\n", " ")
-
-        parti = meta_outcome.split(" ")
-
-        # Completa la lista con stringhe vuote se ha meno di 3 elementi
-        while len(parti) < 3:
-            parti.append("")
-
-        response = parti[0].strip()
-        features = parti[1].strip()
-        expl = ' '.join(parti[2:])
-
-        print(f"- Response: {response}")
-        print(f"- #Features found: {features}")
-        print(f"- Explanation: {expl}")
-
-        if response == "TRUE":
-            PHIDIAS.achieve(accept(), "metaval")
-        else:
-            PHIDIAS.achieve(refuse(), "metaval")
-
 
 
 
@@ -365,7 +309,6 @@ def query_database(file_to_search):
     if result:
         print(f"\n📄 Document found for {file_to_search}:\n")
         result.pop('_id', None)
-        #print(json.dumps(result, indent=2, ensure_ascii=False))
 
         default_annotation = result.get('defaultAnnotation', {})
 
