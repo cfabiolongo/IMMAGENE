@@ -1,17 +1,24 @@
 import pandas as pd
+import re
+def estrai_numeri(stringa):
+    # Trova tutti i numeri (interi o decimali) e rimuove eventuali punti finali
+    numero = re.findall(r'\d+', stringa)
+    return numero
 
 # Carica il file Excel
-file_path = '../direct_image_descr_llava34b_dipa.xlsx'
+file_path = 'direct_image_descr_qwen2.5vl-72b_dipa.xlsx'
 df = pd.read_excel(file_path)
 
+
+
 # True Positive
-TP = len(df[(df['response'] == "TRUE") & (df['ground_truth_ft_number'] > 0)])
+TP = len(df[(df['response'] == True) & (df['ground_truth_ft_number'] > 0)])
 # False Positive
-FP = len(df[(df['response'] == "TRUE") & (df['ground_truth_ft_number'] == 0)])
+FP = len(df[(df['response'] == True) & (df['ground_truth_ft_number'] == 0)])
 # False Negative
-FN = len(df[(df['response'] == "FALSE") & (df['ground_truth_ft_number'] > 0)])
+FN = len(df[(df['response'] == False) & (df['ground_truth_ft_number'] > 0)])
 # True Negative
-TN = len(df[(df['response'] == "FALSE") & (df['ground_truth_ft_number'] == 0)])
+TN = len(df[(df['response'] == False) & (df['ground_truth_ft_number'] == 0)])
 
 print(f"TP: {TP}, FP: {FP}, FN: {FN}, TN: {TN}")
 

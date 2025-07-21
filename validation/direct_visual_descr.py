@@ -36,18 +36,24 @@ def query_database(file_to_search):
     return no_privacy_false_categories
 
 
-# Cartella contenente le immagini
-prompt = f"Answer with a single boolean TRUE if you find privacy-threating items in the image, FALSE otherwise. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+dipa_cat = ['Person','Place Identifier','Identity','Home','Interior','Vehicle Plate','Bystander','Food','Printed Materials','Screen','Clothing','Scenery','Pet','Book','Photo','Machine','Table','Electronic Devices','Cosmetics','Toy','Finger','Cigarettes','Accident','Musical Instrument','Nudity','Accessory']
+
+
+# Dataset non-guided prompt
+# prompt = "Answer with TRUE if you find privacy-threating items in the image, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+# Dataset guided prompt with categories
+prompt = f"Answer with TRUE if you find privacy-threating items in the image from the following list: {dipa_cat}, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+print(prompt)
 
 # test dataset
-image_folder = "DIPA_TEST"
-output_excel = 'direct_image_descr_llava34b_dipa.xlsx'
+image_folder = "../DIPA_TEST"
+output_excel = 'direct_image_descr_qwen2.5vl-72b_dipa_guided.xlsx'
 
 # test dataset
 # image_folder = "DIPA_TEST"
 # output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
 
-# model = "llava:13b-v1.5-q6_K"
+# model = llava:13b-v1.5-q6_K, llava:34b-v1.6-fp16, llama3.2-vision:11b-instruct-q8_0, qwen2.5vl:72b
 model = "llava:34b-v1.6-fp16"
 
 # OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
