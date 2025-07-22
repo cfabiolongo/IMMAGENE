@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'overall_gemma_llama3_70b.xlsx'
+file_path = 'overall_gemma_qwen72b.xlsx'
 df = pd.read_excel(file_path)
 
 print("\n---------- OVERALL SCORES ----------\n")

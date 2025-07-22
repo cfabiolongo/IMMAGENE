@@ -18,7 +18,7 @@ from ollama_inference import ask_ollama_stream
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "llama3.3:70b-instruct-fp16"
+text_model = "qwen2.5:72b-instruct-fp16"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -138,6 +138,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "overall_gemma_llama3_70b.xlsx"
+        output_path = "overall_gemma_qwen72b.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
