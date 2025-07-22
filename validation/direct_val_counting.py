@@ -6,10 +6,19 @@ def estrai_numeri(stringa):
     return numero
 
 # Carica il file Excel
-file_path = 'direct_image_descr_qwen2.5vl-72b_dipa.xlsx'
+file_path = 'direct_image_descr_gemma3-27b-90b_dipa_guided.xlsx'
 df = pd.read_excel(file_path)
 
 
+
+# True Positive
+# TP = len(df[(df['response'] == "TRUE") & (df['ground_truth_ft_number'] > 0)])
+# # False Positive
+# FP = len(df[(df['response'] == "TRUE") & (df['ground_truth_ft_number'] == 0)])
+# # False Negative
+# FN = len(df[(df['response'] == "FALSE") & (df['ground_truth_ft_number'] > 0)])
+# # True Negative
+# TN = len(df[(df['response'] == "FALSE") & (df['ground_truth_ft_number'] == 0)])
 
 # True Positive
 TP = len(df[(df['response'] == True) & (df['ground_truth_ft_number'] > 0)])
@@ -28,6 +37,9 @@ recall = TP / (TP + FN) if (TP + FN) > 0 else 0
 f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 denominator = TP + FP + FN + TN
 accuracy = (TP + TN) / denominator if denominator > 0 else 0
+
+non_allucination_rate = ((denominator / df.shape[0]) * 100)
+print(f"Allucinations rate: {100-non_allucination_rate:.2f}%")
 
 
 # direct LLM assessment
@@ -48,7 +60,7 @@ except Exception:
 extracted_to_ground_truth_ratio = ((total_extracted / total_ground_truth) * 100) if total_ground_truth > 0 else 0
 
 # Stampa risultati
-print(f"Accuracy: {accuracy:.3f}")
+print(f"\nAccuracy: {accuracy:.3f}")
 print(f"Precision: {precision:.3f}")
 print(f"Recall: {recall:.3f}")
 print(f"F1 Score: {f1_score:.3f}\n")

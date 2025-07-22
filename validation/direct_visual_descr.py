@@ -40,21 +40,18 @@ dipa_cat = ['Person','Place Identifier','Identity','Home','Interior','Vehicle Pl
 
 
 # Dataset non-guided prompt
-# prompt = "Answer with TRUE if you find privacy-threating items in the image, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
-# Dataset guided prompt with categories
+#prompt = "Answer with TRUE if you find privacy-threating items in the image, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+
+# Dataset guided prompt (with categories)
 prompt = f"Answer with TRUE if you find privacy-threating items in the image from the following list: {dipa_cat}, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 print(prompt)
 
 # test dataset
 image_folder = "../DIPA_TEST"
-output_excel = 'direct_image_descr_qwen2.5vl-72b_dipa_guided.xlsx'
+output_excel = 'direct_image_descr_gemma3-27b-90b_dipa_guided.xlsx'
 
-# test dataset
-# image_folder = "DIPA_TEST"
-# output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
-
-# model = llava:13b-v1.5-q6_K, llava:34b-v1.6-fp16, llama3.2-vision:11b-instruct-q8_0, qwen2.5vl:72b
-model = "llava:34b-v1.6-fp16"
+# model = llava:34b-v1.6-fp16, llama3.2-vision:11b-instruct-q8_0, qwen2.5vl:72b, llama3.2-vision:90b-instruct-fp16, gemma3:27b-it-qat
+model = "gemma3:27b-it-qat"
 
 # OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
