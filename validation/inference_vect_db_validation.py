@@ -40,6 +40,10 @@ def find_most_similar(input_text):
 def process_excel_descriptions(file_path):
     df = pd.read_excel(file_path)
 
+    # for gemma
+    df['description'] = df['description'].str.replace('</start_of_turn>', '')
+    df['description'] = df['description'].str.replace('</end_of_turn>', '')
+
     risultati = []
     for idx, row in df.iterrows():
         input_desc = row['description']
@@ -59,9 +63,9 @@ def process_excel_descriptions(file_path):
 
 
 if __name__ == "__main__":
-    excel_file = "inferences/image_descriptions_t08_34b_dipalike_test300.xlsx"
+    excel_file = "inferences/image_descriptions_gemma_dipa-like.xlsx"
     df_risultati = process_excel_descriptions(excel_file)
     print("\n✅ Risultati completi:")
     # Salva i risultati in un nuovo file Excel
-    output_file = "risultati_validazione_test300.xlsx"
+    output_file = "risultati_validazione_gemma_test300.xlsx"
     df_risultati.to_excel(output_file, index=False)

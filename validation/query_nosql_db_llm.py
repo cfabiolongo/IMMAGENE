@@ -18,10 +18,11 @@ from ollama_inference import ask_ollama_stream
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "llama4:17b-scout-16e-instruct-q8_0"
+text_model = "llama3.3:70b-instruct-fp16"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
+file_input = []
 file_dipa = []
 response = []
 ground_truth_number = []
@@ -30,7 +31,7 @@ explanation = []
 description = []
 
 
-def query_database(file_to_search, prompt):
+def query_database(file_to_search, ref_dipa, prompt):
 
     # with credentials
     #client = MongoClient("mongodb://root:example@localhost:27017/")
@@ -67,11 +68,10 @@ def query_database(file_to_search, prompt):
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
 
-        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         # zero-shot
-        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
-
+        #system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
         # print(f"meta-outcome: {meta_outcome}")
@@ -96,7 +96,8 @@ def query_database(file_to_search, prompt):
         print(f"ft: {part2}")
         print(f"expl: {meta_outcome}")
 
-        file_dipa.append(file_name)
+        file_input.append(file_to_search)
+        file_dipa.append(ref_dipa)
         response.append(part1)
         ground_truth_number.append(len(no_privacy_false_categories))
         extracted_features.append(part2)
@@ -109,33 +110,26 @@ def query_database(file_to_search, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    # full: risultati_validazione_test300.xlsx, ground truth matched: match_risultati_test300.xlsx, non-ground truth matched: mismatch_risultati_test300.xlsx
-    excel_path = "inferences/risultati_validazione_test300.xlsx"
-    df = pd.read_excel(excel_path)
+    excel_path = "inferences/risultati_validazione_gemma_test300.xlsx"
+    df_result = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
-    if "matched_file_image_name" not in df.columns or "input_description" not in df.columns:
+    if "matched_file_image_name" not in df_result.columns or "input_description" not in df_result.columns:
         print("❌ Colonne richieste non trovate nel file Excel.")
     else:
         # Itera sulle righe del DataFrame
-        for _, row in df.iterrows():
+        for _, row in df_result.iterrows():
             reference = str(row["input_file_image_name"]).strip()
             descr = row["input_description"]
             print(f"\n>>>>> Closer item to {reference} whose description is: {descr}")
             file_name = str(row["matched_file_image_name"]).strip()
 
             if pd.notna(file_name) and file_name:
-                query_database(file_name.split('.')[0], descr)
-
-        print(len(file_dipa))
-        # print(len(response))
-        # print(len(ground_truth_number))
-        # print(len(extracted_features))
-        # print(len(explanation))
-        # print(len(description))
+                query_database(file_name.split('.')[0], reference, descr)
 
         # Creazione del DataFrame
-        df = pd.DataFrame({
+        output_df = pd.DataFrame({
+            'file_input': file_input,
             'reference': file_dipa,
             'response': response,
             'ground_truth_ft_number': ground_truth_number,
@@ -144,7 +138,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_df = pd.DataFrame(df)
-        output_path = "meta_zeroshot_llama4:17b-scout.xlsx"
+        output_path = "overall_gemma_llama3_70b.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")

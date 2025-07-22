@@ -8,15 +8,15 @@ from ollama_inference import describe_image
 prompt = "Describe very briefly."
 
 # test dataset
-image_folder = "DIPA/images"
-output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
-
-# test dataset
-# image_folder = "DIPA_TEST"
+# image_folder = "DIPA/images"
 # output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
 
-# model = "llava:13b-v1.5-q6_K"
-model = "llava:34b-v1.6-fp16"
+# test dataset
+image_folder = "DIPA_TEST"
+output_excel = 'image_descriptions_gemma_dipa-like.xlsx'
+
+# model = llava:34b-v1.6-fp16, llama3.2-vision:11b-instruct-q8_0, qwen2.5vl:72b, llama3.2-vision:90b-instruct-fp16, gemma3:27b-it-qat
+model = "gemma3:27b-it-qat"
 
 # OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
