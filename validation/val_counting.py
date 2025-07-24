@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'overall_gemma_qwen72b.xlsx'
+file_path = 'meta_zeroshot_gemma_llama70b.xlsx'
 df = pd.read_excel(file_path)
 
 print("\n---------- OVERALL SCORES ----------\n")
@@ -43,6 +43,18 @@ print(f"F1 Score: {f1_score:.3f}\n")
 print(f"Totale ground_truth_ft_number: {total_ground_truth}")
 print(f"Totale extracted_features: {total_extracted}")
 print(f"Rapporto extracted/ground_truth: {extracted_to_ground_truth_ratio:.2f}%")
+
+# Calcola gli errori assoluti
+absolute_errors = (df['extracted_features'] - df['ground_truth_ft_number']).abs()
+
+# Calcola le statistiche
+mae = absolute_errors.mean()
+min_error = absolute_errors.min()
+max_error = absolute_errors.max()
+
+print(f"Mean Absolute Error (MAE): {mae:.3f}")
+print(f"Minimum Absolute Error: {min_error:.3f}")
+print(f"Maximum Absolute Error: {max_error:.3f}")
 
 print("\n---------- SUBSET SCORES ----------\n")
 
@@ -104,6 +116,9 @@ print(f"Totale ground_truth_ft_number: {total_ground_truth}")
 print(f"Totale extracted_features: {total_extracted}")
 print(f"Rapporto extracted/ground_truth: {extracted_to_ground_truth_ratio:.2f}%")
 
+mae = (df_match['extracted_features'] - df_match['ground_truth_ft_number']).abs().mean()
+print(f"Mean Absolute Error (MAE): {mae:.3f}")
+
 
 
 
@@ -149,3 +164,6 @@ print(f"F1 Score: {f1_score:.3f}\n")
 print(f"Totale ground_truth_ft_number: {total_ground_truth}")
 print(f"Totale extracted_features: {total_extracted}")
 print(f"Rapporto extracted/ground_truth: {extracted_to_ground_truth_ratio:.2f}%")
+
+mae = (df_non_match['extracted_features'] - df_non_match['ground_truth_ft_number']).abs().mean()
+print(f"Mean Absolute Error (MAE): {mae:.3f}")
