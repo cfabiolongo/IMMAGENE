@@ -1,8 +1,12 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'meta_zeroshot_gemma-gemma_llama70b.xlsx'
+file_path = 'meta_overall_gemma_qwen.xlsx'
 df = pd.read_excel(file_path)
+
+df['ground_truth_ft_number'] = pd.to_numeric(df['ground_truth_ft_number'], errors='coerce').fillna(0)
+df['extracted_features'] = pd.to_numeric(df['extracted_features'], errors='coerce').fillna(0)
+df['response'] = df['response'].astype(bool)
 
 print("\n---------- OVERALL SCORES ----------\n")
 
