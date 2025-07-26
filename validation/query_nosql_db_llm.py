@@ -110,7 +110,7 @@ def query_database(file_to_search, ref_dipa, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    excel_path = "risultati_validazione_gemma_test800.xlsx"
+    excel_path = "inferences/risultati_validazione_qwen_test800.xlsx"
     df_result = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
@@ -138,6 +138,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "meta_overall_gemma_qwen.xlsx"
+        output_path = "meta_overall_qwen_qwen.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
