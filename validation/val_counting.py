@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'meta_zeroshot_gemma_llama70b.xlsx'
+file_path = 'meta_zeroshot_gemma-gemma_llama70b.xlsx'
 df = pd.read_excel(file_path)
 
 print("\n---------- OVERALL SCORES ----------\n")
@@ -70,7 +70,8 @@ df['match'] = df['reference_clean'] == df['file_input']
 
 # Calcola accuracy
 accuracy = df['match'].mean()
-print(f"Accuracy: {accuracy:.2%}")
+print(f"MATCHES percentage: {accuracy:.2%}")
+if accuracy==0: exit(0)
 
 
 print("\n---------- MATCH SCORES ----------\n")

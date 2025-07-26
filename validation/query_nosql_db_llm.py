@@ -68,10 +68,10 @@ def query_database(file_to_search, ref_dipa, prompt):
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
 
-        #system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         # zero-shot
-        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        #system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
         # print(f"meta-outcome: {meta_outcome}")
@@ -110,7 +110,7 @@ def query_database(file_to_search, ref_dipa, prompt):
 if __name__ == "__main__":
 
     # Carica il file Excel
-    excel_path = "inferences/risultati_validazione_gemma_test300.xlsx"
+    excel_path = "risultati_validazione_gemma_test800.xlsx"
     df_result = pd.read_excel(excel_path)
 
     # Controlla che la colonna esista
@@ -138,6 +138,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "meta_zeroshot_gemma_llama70b.xlsx"
+        output_path = "meta_zeroshot_gemma-gemma_llama70b.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")

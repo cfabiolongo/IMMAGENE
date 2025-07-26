@@ -11,7 +11,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 def find_most_similar(input_text):
     input_embedding = model.encode(input_text).astype(np.float32)
 
-    conn = sqlite3.connect('inferences/image_descriptions_t08_34b_brief.db')
+    conn = sqlite3.connect('inferences/image_descriptions_gemma.db')
     c = conn.cursor()
     c.execute('SELECT id, file_image_name, description, embedding FROM immagini')
     rows = c.fetchall()
@@ -67,5 +67,5 @@ if __name__ == "__main__":
     df_risultati = process_excel_descriptions(excel_file)
     print("\n✅ Risultati completi:")
     # Salva i risultati in un nuovo file Excel
-    output_file = "risultati_validazione_gemma_test300.xlsx"
+    output_file = "risultati_validazione_gemma_test800.xlsx"
     df_risultati.to_excel(output_file, index=False)

@@ -15,7 +15,11 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 print(f"model {model} loaded.")
 
 # Carica Excel
-df = pd.read_excel('inferences/image_descriptions_t08_34b_brief.xlsx')
+df = pd.read_excel('validation/inferences/image_descriptions_gemma_dipa-like.xlsx')
+
+df['description'].replace('</start_of_turn>', '', inplace=True)
+df['description'].replace('</end_of_turn>', '', inplace=True)
+
 
 # Calcola embedding con barra di progresso
 df['embedding'] = df['description'].progress_apply(
@@ -23,7 +27,7 @@ df['embedding'] = df['description'].progress_apply(
 )
 
 # Crea DB SQLite
-conn = sqlite3.connect('inferences/image_descriptions_t08_34b_brief.db')
+conn = sqlite3.connect('validation/inferences/image_descriptions_gemma.db')
 c = conn.cursor()
 
 # Crea tabella
