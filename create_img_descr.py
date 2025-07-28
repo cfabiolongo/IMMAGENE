@@ -13,10 +13,10 @@ prompt = "Describe very briefly."
 
 # test dataset
 image_folder = "DIPA_TEST"
-output_excel = 'validation/inferences/image_descriptions_qwen_dipa-like.xlsx'
+output_excel = 'validation/inferences/image_descriptions_llama32_dipa-like.xlsx'
 
-# model = llava:34b-v1.6-fp16, llama3.2-vision:11b-instruct-q8_0, qwen2.5vl:72b, llama3.2-vision:90b-instruct-fp16, gemma3:27b-it-qat
-model = "qwen2.5vl:72b"
+# model = llava:34b-v1.6-fp16, qwen2.5vl:72b, llama3.2-vision:90b-instruct-fp16, gemma3:27b-it-qat
+model = "llama3.2-vision:90b-instruct-fp16"
 
 # OLLAMA_API_URL_MULTI = "http://localhost:11434/api/generate"
 OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
