@@ -197,14 +197,34 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 
 ---------------
 
-To replicate the paper's validation procedure, with the synthetic dataset generation, the following preliminary steps must be accomplished:
+This section shows all required steps to replicate the paper validation procedure, by employing a test synthetic dataset generation.
+
+### Synthetic dataset generation
+
+---------------
+
+To generate the DIPA-alike dataset to be used for the validation process, the following preliminary steps must be accomplished:
 
 * Test images selection from DIPA.
 * Description files creation with [create_img_descr.py](create_img_descr.py). This work's experiments were conducted with [output_filter.xlsx](validation/inferences/output_filter.xlsx) as results of this computation.
 * Synthetic images dataset creation (folder [DIPA_TEST](DIPA_TEST)) with [diffusion_full.py](diffusion_full.py).
 
-To achieve more control, the whole inference validation process has been split into the following steps:
+### Step-by-Step IMMAGENE inference validation
+
+---------------
+
+To achieve more control over the procedure, the whole inference validation process has been split into the following steps:
 
 * Creation of the DIPA_TEST archive of images descriptions, with [create_img_descr.py](create_img_descr.py).
-* Creation of the archive of best vectorial matches with the DIPA_TEST, with [inference_vect_db_validation.py](validation/inference_vect_db_validation.py).
+* Creation of the archive of "best" vectorial matches with the DIPA_TEST, with [inference_vect_db_validation.py](validation/inference_vect_db_validation.py).
+* Creation of the inferences outcome archive, with [query_nosql_db_llm.py](validation/query_nosql_db_llm.py). 
+* Scores calculation for the above inferences, with [val_counting.py](validation/val_counting.py).
 
+### Direct VLM inference validation
+
+---------------
+
+By leveraging on the above DIPA_TEST images, to compare the IMMAGENE results the following steps must be accomplished:
+
+* Creation of the inference outcome archive for direct VLMs, with [direct_visual_descr.py](validation/direct_visual_descr.py). 
+* Scores calculation for the above inferences, for both *pure* zero-shot and DIPA *category-guided* prompts, with [direct_val_counting.py](validation/direct_val_counting.py).
