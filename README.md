@@ -2,7 +2,8 @@
 Intelligent Multi-Modal Agents based on GEnerative Narrative Evaluation.
 
 This is the repository of the Python (3.7+) implementation of IMMAGENE (**I**ntelligent **M**ulti-**M**odal **A**gents based on **Ge**nerative **N**arrative **E**valuation), 
-for the evaluation of intelligent agent based on generative multi-modal narrative. IMMAGENE is built on top of the framework [PHIDIAS](https://ceur-ws.org/Vol-2502/paper5.pdf).
+for the evaluation of intelligent agent based on generative multi-modal narrative, presented at the European Conference of Artificial Intelligence (ECAI 2025). 
+IMMAGENE is built on top of the framework [PHIDIAS](https://ceur-ws.org/Vol-2502/paper5.pdf).
 
 ![Image 1](images/schema.jpg)
 
@@ -19,6 +20,8 @@ This repository has been tested on Python 3.10 64bit (Windows 10/PopOs linux), w
 * pandas (2.2.3)
 * openpyxl (3.1.5)
 * pymongo (4.12.0)
+
+Except for Phidias, all required packages can be installed from the [requierement](requirements.txt) file.
 
 ### PHIDIAS installation
 
@@ -165,7 +168,7 @@ commit() / (DESCR(D) & PLAN(P)) >> [+DESCR(D, P)[{'to': "Metaval"}], show_line("
 clear() / (DESCR(D) & GOAL(G) & PLAN(P)) >> [-DESCR(D), -GOAL(G), -PLAN(P)]
 ```
 
-### Images description dataset preparation
+## Images description dataset preparation
 
 ---------------
 This framework's meta-reasoning relies on the annotated images dataset [DIPA](https://dl.acm.org/doi/abs/10.1145/3581754.3584176).
@@ -189,3 +192,19 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 * Set the proper variables im the file [create_nosql_db.py](create_nosql_db.py)
 * Run the above create_nosql_db.py to build the NoSql database.
 * Run [query_nosql_db.py](query_nosql_db.py) to test the NoSql database (e.g 00b4064b073e51f3)
+
+## Validation replication procedure
+
+---------------
+
+To replicate the paper's validation procedure, with the synthetic dataset generation, the following preliminary steps must be accomplished:
+
+* Test images selection from DIPA.
+* Description files creation with [create_img_descr.py](create_img_descr.py). This work's experiments were conducted with [output_filter.xlsx](validation/inferences/output_filter.xlsx) as results of this computation.
+* Synthetic images dataset creation (folder [DIPA_TEST](DIPA_TEST)) with [diffusion_full.py](diffusion_full.py).
+
+To achieve more control, the whole inference validation process has been split into the following steps:
+
+* Creation of the DIPA_TEST archive of images descriptions, with [create_img_descr.py](create_img_descr.py).
+* Creation of the archive of best vectorial matches with the DIPA_TEST, with [inference_vect_db_validation.py](validation/inference_vect_db_validation.py).
+

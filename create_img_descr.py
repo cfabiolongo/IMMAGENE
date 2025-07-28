@@ -7,7 +7,7 @@ from ollama_inference import describe_image
 
 prompt = "Describe very briefly."
 
-# test dataset
+# target dataset
 # image_folder = "DIPA/images"
 # output_excel = 'image_descriptions_t0_34b_dipa.xlsx'
 
