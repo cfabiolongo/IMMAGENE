@@ -194,8 +194,6 @@ This framework's meta-reasoning relies on the annotated images dataset [DIPA](ht
 
 ## Validation replication procedure
 
----------------
-
 This section shows all required steps to replicate the paper validation procedure, by employing a test synthetic dataset generation.
 
 ### Synthetic dataset generation
