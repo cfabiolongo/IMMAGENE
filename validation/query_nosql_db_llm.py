@@ -12,13 +12,13 @@ from ollama_inference import ask_ollama_stream
 # llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K, mistral:7b-instruct-q8_0
 
 # work (172.16.61.73):
-# server: llama3.3:70b-instruct-fp16, qwen2.5:72b-instruct-fp16, llama4:17b-scout-16e-instruct-q8_0
+# server: llama3.3:70b-instruct-fp16, qwen2.5:72b-instruct-fp16
 # local: qwen2.5:14b-instruct-q8_0
 
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "qwen2.5:72b-instruct-fp16"
+text_model = "llama3.3:70b-instruct-fp16"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
