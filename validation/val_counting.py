@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il file Excel
-file_path = 'inferences/meta_zero-shot_overall_qwen_llama.xlsx'
+file_path = 'inferences/meta_zeroshot_overall_qwen_gpt-oss-120b.xlsx'
 df = pd.read_excel(file_path)
 
 df['ground_truth_ft_number'] = pd.to_numeric(df['ground_truth_ft_number'], errors='coerce').fillna(0)

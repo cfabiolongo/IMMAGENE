@@ -12,13 +12,13 @@ from ollama_inference import ask_ollama_stream
 # llama3:8b-instruct-q8_0, qwen2.5:14b-instruct-q6_K, mistral:7b-instruct-q8_0
 
 # work (172.16.61.73):
-# server: llama3.3:70b-instruct-fp16, qwen2.5:72b-instruct-fp16
-# local: qwen2.5:14b-instruct-q8_0
+# server: llama3.3:70b-instruct-fp16, qwen2.5:72b-instruct-fp16, gpt-oss:120b
+# local: qwen2.5:14b-instruct-q8_0, gpt-oss:20b
 
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "llama3.3:70b-instruct-fp16"
+text_model = "gpt-oss:120b"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -68,10 +68,10 @@ def query_database(file_to_search, ref_dipa, prompt):
         print("\nCategorie con ifNoPrivacy == False:")
         print(no_privacy_false_categories)
 
-        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
+        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, whether or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         # zero-shot
-        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, weather or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also what items you found."
+        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, whether or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also what items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
         # print(f"meta-outcome: {meta_outcome}")
@@ -138,6 +138,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "inferences/meta_zero-shot_overall_qwen_llama.xlsx"
+        output_path = "inferences/meta_zeroshot_overall_qwen_gpt-oss-120b.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
