@@ -18,7 +18,7 @@ from ollama_inference import ask_ollama_stream
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "gpt-oss:120b"
+text_model = "llama3.3:70b-instruct-fp16"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -30,14 +30,18 @@ extracted_features = []
 explanation = []
 description = []
 
+dipa_cat = ['Person', 'Place Identifier', 'Identity', 'Home', 'Interior', 'Vehicle Plate', 'Bystander', 'Food',
+            'Printed Materials', 'Screen', 'Clothing', 'Scenery', 'Pet', 'Book', 'Photo', 'Machine', 'Table',
+            'Electronic Devices', 'Cosmetics', 'Toy', 'Finger', 'Cigarettes', 'Accident', 'Musical Instrument',
+            'Nudity', 'Accessory']
 
 def query_database(file_to_search, ref_dipa, prompt):
 
     # with credentials
-    #client = MongoClient("mongodb://root:example@localhost:27017/")
+    client = MongoClient("mongodb://root:example@localhost:27018/")
 
     # without credentials
-    client = MongoClient('mongodb://localhost:27017/')
+    # client = MongoClient('mongodb://localhost:27017/')
 
     db = client['dipa']
     collection = db['annotations_collection']
@@ -71,7 +75,10 @@ def query_database(file_to_search, ref_dipa, prompt):
         # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, whether or not you found items (or similar) from the following privacy-threating list: {no_privacy_false_categories}. The boolean must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         # zero-shot
-        system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, whether or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also what items you found."
+        # system_prompt = f"In the following description, answer with a single boolean TRUE or FALSE, whether or not you found privacy-threating items. The boolean must be followed by the number of found items (e.g TRUE 2). Report also what items you found."
+
+        # Dataset guided prompt (with categories)
+        system_prompt = f"Answer with TRUE if you find privacy-threating items from the following list: {dipa_cat}, otherwise answer FALSE. The response must be followed by the number of found items (e.g TRUE 2). Report also which items you found."
 
         meta_outcome = ask_ollama_stream(OLLAMA_API_URL, prompt, system_prompt, temp, text_model)
         # print(f"meta-outcome: {meta_outcome}")
@@ -138,6 +145,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "inferences/meta_zeroshot_overall_qwen_gpt-oss-120b.xlsx"
+        output_path = "inferences/meta_fcd_overall_qwen_llama.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
