@@ -18,7 +18,7 @@ from ollama_inference import ask_ollama_stream
 OLLAMA_API_URL = "http://172.16.61.73:11434/api/generate"
 # OLLAMA_API_URL = "http://localhost:11434/api/generate"
 
-text_model = "llama3.3:70b-instruct-fp16"
+text_model = "gpt-oss:120b"
 temp = 0.8
 
 # Inizializza una lista per salvare le risposte
@@ -145,6 +145,6 @@ if __name__ == "__main__":
             'description': description
         })
 
-        output_path = "inferences/meta_fcd_overall_qwen_llama.xlsx"
+        output_path = "inferences/meta_fcd_overall_qwen_gpt120.xlsx"
         output_df.to_excel(output_path, index=False)
         print(f"\n✅ File Excel salvato in: {output_path}")
