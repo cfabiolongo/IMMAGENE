@@ -1,6 +1,7 @@
 import base64
 import requests
 import json
+import time
 
 # server:
 # OLLAMA_API_URL_MULTI = "http://172.16.61.73:11434/api/generate"
@@ -69,6 +70,8 @@ def describe_image(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
 
 
 
+
+
 def describe_image_status(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model):
     image_base64 = image_to_base64(image_path)
     data = {
@@ -78,15 +81,18 @@ def describe_image_status(OLLAMA_API_URL_MULTI, image_path, prompt, temp, model)
         "temperature": temp,
         "stream": False,
         "top_k": 0,
-        "num_predict": 77  # vincolo testo generato a 77 token
+        "num_predict": 77
     }
     try:
+        start_time = time.time()
         response = requests.post(OLLAMA_API_URL_MULTI, json=data)
+        elapsed_time = time.time() - start_time
+
         if response.status_code == 200:
             result = response.json()
-            return True, result.get("response", "Nessuna risposta dal modello.")
+            return True, result.get("response", "Nessuna risposta dal modello."), elapsed_time
         else:
             error_message = f"Errore: {response.status_code} - {response.text}"
-            return False, error_message
+            return False, error_message, elapsed_time
     except requests.exceptions.ConnectionError:
-        return False, "Errore: impossibile connettersi a Ollama."
+        return False, "Errore: impossibile connettersi a Ollama.", None

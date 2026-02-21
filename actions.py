@@ -3,7 +3,7 @@ import os
 import queue
 from pymongo import MongoClient
 from ollama_inference import ask_ollama_stream, describe_image_status
-
+import time
 import sqlite3
 import numpy as np
 # pip install sentence-transformers
@@ -11,9 +11,25 @@ from sentence_transformers import SentenceTransformer
 # pip install huggingface_hub[hf_xet]
 from sklearn.metrics.pairwise import cosine_similarity
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client['dipa']
-collection = db['annotations_collection']
+
+from phidias.Lib import *
+from phidias.Agent import *
+from phidias.Types import *
+
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+# DB Section
+NOSQL_CONN = config.get('DATABASE', 'NOSQL_CONN')
+NOSQL_DB = config.get('DATABASE', 'NOSQL_DB')
+NOSQL_COLLECTION = config.get('DATABASE', 'NOSQL_COLLECTION')
+VECT_DB = config.get('DATABASE', 'VECT_DB')
+
+client = MongoClient(NOSQL_CONN)
+db = client[NOSQL_DB]
+collection = db[NOSQL_COLLECTION]
 
 # Local path to save the embedding model
 MODEL_DIR = "./all-MiniLM-L6-v2"
@@ -34,14 +50,6 @@ model = load_or_download_model(MODEL_DIR)
 
 sys.path.insert(0, "../lib")
 
-from phidias.Lib import *
-from phidias.Agent import *
-from phidias.Types import *
-
-import configparser
-
-config = configparser.ConfigParser()
-config.read('config.ini')
 
 # LLM Multi-Modal Section
 MM_HOST = config.get('MULTI_LLM', 'HOST')
@@ -140,9 +148,12 @@ class ack_plan(ActiveBelief):
 
         print(f"\nPlan {plan} assessment for the scenario {descr}...")
 
+        start_time = time.time()
         result = find_most_similar(descr)
-        print("\n🔍 Closer result:")
-        print(result)
+        elapsed_time = time.time() - start_time
+
+        print(f"\n🔍 Closer result: {result}")
+        print(f"Vector db retrieval time: {elapsed_time}")
 
         file_to_search = result['file_image_name'].split(".")[0]
         privacy_threatening_list = query_database(file_to_search)
@@ -151,7 +162,9 @@ class ack_plan(ActiveBelief):
         list_str = ", ".join(privacy_threatening_list)
         SYSTEM_PROMPT = SYSTEM.replace("[LIST]", list_str)
 
+        meta_start_time = time.time()
         meta_outcome = ask_ollama_stream(HOST, descr, SYSTEM_PROMPT, TEMP, MODEL)
+        meta_elapsed_time = time.time() - meta_start_time
 
         # only for chain-of-thoughs models (e.g. deedseek, qwen)
         # meta_outcome = re.sub(r"<think>.*?</think>", "",  meta_outcome, flags=re.DOTALL)
@@ -169,6 +182,8 @@ class ack_plan(ActiveBelief):
         response = parti[0].strip()
         features = parti[1].strip()
         expl = ' '.join(parti[2:])
+        meta_elapsed_time = time.time() - start_time
+        print(f"Meta inference time: {meta_elapsed_time}")
 
         print(f"- Response: {response}")
         print(f"- #Features found: {features}")
@@ -190,10 +205,11 @@ class achieve_img_descr(Action):
         image_path = IMAGES_PATH+"/"+IMAGES
         print(f"Img path: {image_path}")
 
-        success, descr = describe_image_status(MM_HOST, image_path, MM_SYSTEM, MM_TEMP, MM_MODEL)
+        success, descr, inference_time = describe_image_status(MM_HOST, image_path, MM_SYSTEM, MM_TEMP, MM_MODEL)
 
         if success:
             print(f"Img descr: {descr}")
+            print(f"visual inference time: {inference_time}")
             self.assert_belief(DESCR(descr))
         else:
             print(descr)
@@ -202,7 +218,7 @@ class achieve_img_descr(Action):
 def find_most_similar(input_text):
     input_embedding = model.encode(input_text).astype(np.float32)
 
-    conn = sqlite3.connect('validation/inferences/image_descriptions_t08_34b_brief.db')
+    conn = sqlite3.connect(VECT_DB)
     c = conn.cursor()
     c.execute('SELECT id, file_image_name, description, embedding FROM immagini')
     rows = c.fetchall()
